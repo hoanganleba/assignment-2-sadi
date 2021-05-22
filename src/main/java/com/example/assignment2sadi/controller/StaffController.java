@@ -1,6 +1,7 @@
 package com.example.assignment2sadi.controller;
 
 import com.example.assignment2sadi.model.Staff;
+import com.example.assignment2sadi.model.Staff;
 import com.example.assignment2sadi.repository.StaffRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:8081")
 public class StaffController {
 
     private final StaffRepository staffRepository;
@@ -32,6 +33,20 @@ public class StaffController {
     @PostMapping("/staff")
     public Object createStaff(@RequestBody Staff staff) {
         return staffRepository.save(staff);
+    }
+
+    // Update
+    @PutMapping("/staff/{staffId}")
+    public Object updateStaff(@RequestBody Staff newStaff, @PathVariable Integer staffId) {
+        return staffRepository.findById(staffId).map(staff -> {
+            staff.setName(newStaff.getName());
+            staff.setAddress(newStaff.getAddress());
+            staff.setEmail(newStaff.getEmail());
+            staff.setPhoneNumber(newStaff.getPhoneNumber());
+            staff.setEmail(newStaff.getEmail());
+            staffRepository.save(staff);
+            return ResponseEntity.ok(newStaff);
+        });
     }
 
     // Delete
