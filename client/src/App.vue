@@ -31,9 +31,10 @@
 
       <v-list>
         <v-list-item
-            v-for="[icon, text] in links"
+            v-for="[icon, text, link] in links"
             :key="icon"
-            link
+            :to="link"
+
         >
           <v-list-item-icon>
             <v-icon>{{ icon }}</v-icon>
@@ -62,8 +63,8 @@ export default {
   data: () => ({
     drawer: null,
     links: [
-      ['mdi-inbox-arrow-down', 'Home'],
-      ['mdi-send', 'Send'],
+      ['mdi-inbox-arrow-down', 'Home', '/'],
+      ['mdi-send', 'Order', '/orders'],
       ['mdi-delete', 'Trash'],
       ['mdi-alert-octagon', 'Spam'],
     ],

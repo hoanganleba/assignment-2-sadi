@@ -1,8 +1,13 @@
 package com.example.assignment2sadi.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 public class Product {
     @Id
     @Column
@@ -24,8 +29,9 @@ public class Product {
     @Column
     private String description;
 
-    @Column
-    private String category;
+    @OneToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @Column
     private String price;

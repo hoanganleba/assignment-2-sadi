@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class OrderDetail {
+public class InventoryDeliveryDetail {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,11 +21,8 @@ public class OrderDetail {
     @Column
     private int quantity;
 
-    @Column
-    private String price;
-
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "inventoryDelivery_id")
     @JsonIgnore
-    private Order order;
+    private InventoryDelivery inventoryDelivery;
 }

@@ -1,10 +1,17 @@
 package com.example.assignment2sadi;
 
+import com.example.assignment2sadi.repository.CustomerRepositoryTest;
+import com.example.assignment2sadi.repository.ProviderRepositoryTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
-@SpringBootTest
-class Assignment2SadiApplicationTests {
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+        CustomerRepositoryTest.class,
+        ProviderRepositoryTest.class
+})
+public class Assignment2SadiApplicationTests {
 
     @Test
     void contextLoads() {

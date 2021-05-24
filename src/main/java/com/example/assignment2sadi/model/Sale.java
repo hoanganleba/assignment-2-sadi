@@ -10,8 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "order_table")
-public class Order {
+public class Sale {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,14 +19,17 @@ public class Order {
     @Column
     private Date date;
 
+    @Column
+    private String totalPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
     @ManyToOne
     @JoinColumn(name = "staff_id")
     private Staff staff;
 
-    @ManyToOne
-    @JoinColumn(name = "provider_id")
-    private Provider provider;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderDetail> orderDetails;
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
+    private List<SaleDetail> saleDetails;
 }

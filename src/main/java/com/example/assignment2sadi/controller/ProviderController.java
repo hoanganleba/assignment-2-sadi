@@ -34,6 +34,22 @@ public class ProviderController {
         return providerRepository.save(provider);
     }
 
+    // Update
+    @PutMapping("/provider/{providerId}")
+    public Object updateProvider(@RequestBody Provider newProvider, @PathVariable Integer providerId) {
+        return providerRepository.findById(providerId).map(provider -> {
+            provider.setName(newProvider.getName());
+            provider.setAddress(newProvider.getAddress());
+            provider.setEmail(newProvider.getEmail());
+            provider.setPhoneNumber(newProvider.getPhoneNumber());
+            provider.setFax(newProvider.getFax());
+            provider.setEmail(newProvider.getEmail());
+            provider.setContactPerson(newProvider.getContactPerson());
+            providerRepository.save(provider);
+            return ResponseEntity.ok(newProvider);
+        });
+    }
+
     // Delete
     @DeleteMapping("/provider/{providerId}")
     public void deleteProvider(@PathVariable Integer providerId) {

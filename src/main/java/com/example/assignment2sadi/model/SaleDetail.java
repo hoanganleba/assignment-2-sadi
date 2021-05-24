@@ -5,36 +5,27 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class Provider {
+public class SaleDetail {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
-    private String name;
+    private String product;
 
     @Column
-    private String address;
+    private String quantity;
 
     @Column
-    private String phoneNumber;
+    private String price;
 
-    @Column
-    private String fax;
-
-    @Column
-    private String email;
-
-    @Column
-    private String contactPerson;
-
-    @OneToMany(mappedBy = "provider")
+    @ManyToOne
+    @JoinColumn(name = "sale_id")
     @JsonIgnore
-    private List<Order> order;
+    private Sale sale;
 }

@@ -1,9 +1,11 @@
 package com.example.assignment2sadi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,4 +27,12 @@ public class Staff {
 
     @Column
     private String email;
+
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Order> order;
+
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Sale> sales;
 }
