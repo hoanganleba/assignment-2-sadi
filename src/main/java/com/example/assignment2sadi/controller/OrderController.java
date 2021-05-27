@@ -2,8 +2,6 @@ package com.example.assignment2sadi.controller;
 
 import com.example.assignment2sadi.model.Order;
 import com.example.assignment2sadi.repository.OrderRepository;
-import com.example.assignment2sadi.repository.ProviderRepository;
-import com.example.assignment2sadi.repository.StaffRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,13 +12,9 @@ import java.util.List;
 public class OrderController {
 
     private final OrderRepository orderRepository;
-    private final StaffRepository staffRepository;
-    private final ProviderRepository providerRepository;
 
-    public OrderController(OrderRepository orderRepository, StaffRepository staffRepository, ProviderRepository providerRepository) {
+    public OrderController(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-        this.staffRepository = staffRepository;
-        this.providerRepository = providerRepository;
     }
 
     @GetMapping("/orders")
@@ -35,15 +29,9 @@ public class OrderController {
     }
 
     // Add order
-    @PostMapping("/order/{staffId}/{providerId}")
-    public Object createOrder(@RequestBody Order order, @PathVariable Integer staffId, @PathVariable Integer providerId) {
-        return staffRepository.findById(staffId).map(staff -> {
-            order.setStaff(staff);
-            return providerRepository.findById(providerId).map(provider -> {
-                order.setProvider(provider);
-                return orderRepository.save(order);
-            });
-        });
+    @PostMapping("/order")
+    public Object createOrder(@RequestBody Order order) {
+        return orderRepository.save(order);
     }
 
     // Delete

@@ -1,14 +1,14 @@
 <template>
   <v-data-table
       :headers="headers"
-      :items="providers"
+      :items="saleDetails"
       class="elevation-1"
   >
     <template v-slot:top>
       <v-toolbar
           flat
       >
-        <v-toolbar-title>Provider</v-toolbar-title>
+        <v-toolbar-title>Sale Detail</v-toolbar-title>
         <v-divider
             class="mx-4"
             inset
@@ -27,7 +27,7 @@
                 v-bind="attrs"
                 v-on="on"
             >
-              New Provider
+              New Sale Detail
             </v-btn>
           </template>
           <v-card>
@@ -41,61 +41,31 @@
                   <v-col
                       cols="12"
                       sm="6"
-                      md="4"
+                      md="6"
                   >
                     <v-text-field
-                        v-model="editedProvider.name"
-                        label="Provider Name"
+                        v-model="editedSaleDetail.product"
+                        label="Product"
                     ></v-text-field>
                   </v-col>
                   <v-col
                       cols="12"
                       sm="6"
-                      md="4"
+                      md="6"
                   >
                     <v-text-field
-                        v-model="editedProvider.address"
-                        label="Address"
+                        v-model="editedSaleDetail.quantity"
+                        label="Quantity"
                     ></v-text-field>
                   </v-col>
                   <v-col
                       cols="12"
-                      sm="6"
-                      md="4"
+                      sm="12"
+                      md="12"
                   >
                     <v-text-field
-                        v-model="editedProvider.phoneNumber"
-                        label="Phone Number"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="editedProvider.fax"
-                        label="Fax"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="editedProvider.email"
-                        label="Email"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="editedProvider.contactPerson"
-                        label="Contact Person"
+                        v-model="editedSaleDetail.price"
+                        label="Price"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -127,24 +97,29 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteProviderConfirm">OK</v-btn>
+              <v-btn color="blue darken-1" text @click="deleteSaleDetailConfirm">OK</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
     </template>
+    <template  v-slot:item.details="{ item }">
+      <router-link :to="{ name: 'SaleDetailDetail', params: { id: item.id } }">
+        Details
+      </router-link>
+    </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
           small
           class="mr-2"
-          @click="editProvider(item)"
+          @click="editSaleDetail(item)"
       >
         mdi-pencil
       </v-icon>
       <v-icon
           small
-          @click="deleteProvider(item)"
+          @click="deleteSaleDetail(item)"
       >
         mdi-delete
       </v-icon>
@@ -161,51 +136,44 @@
 </template>
 
 <script>
-import ProviderFactory from '@/factories/ProviderFactory'
+import SaleDetailFactory from '@/factories/SaleDetailFactory'
+import ProviderFactory from "@/factories/ProviderFactory";
 
 export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
     headers: [
-      {
-        text: 'Name',
-        align: 'start',
-        sortable: false,
-        value: 'name',
-      },
-      {text: 'Address', value: 'address'},
-      {text: 'Phone Number', value: 'phoneNumber'},
-      {text: 'Fax', value: 'fax'},
-      {text: 'Email', value: 'email'},
-      {text: 'Contact Person', value: 'contactPerson'},
+      {text: 'Id', value: 'id'},
+      {text: 'Product', value: 'product'},
+      {text: 'Quantity', value: 'quantity'},
+      {text: 'Price', value: 'price'},
       {text: 'Actions', value: 'actions', sortable: false},
     ],
+    saleDetails: [],
+    products: [],
     providers: [],
+    date: '',
     editedIndex: -1,
-    editedProvider: {
+    editedSaleDetail: {
       id: '',
-      name: '',
-      address: '',
-      phoneNumber: '',
-      fax: '',
-      email: '',
-      contactPerson: ''
+      product: '',
+      quantity: '',
+      price: ''
     },
-    defaultProvider: {
+    defaultSaleDetail: {
       id: '',
-      name: '',
-      address: '',
-      phoneNumber: '',
-      fax: '',
-      email: '',
-      contactPerson: ''
+      product: '',
+      quantity: '',
+      price: ''
     },
   }),
 
+  props: ['id'],
+
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Provider' : 'Edit Provider'
+      return this.editedIndex === -1 ? 'New Sale Detail' : 'Edit Sale Detail'
     },
   },
 
@@ -224,32 +192,34 @@ export default {
 
   methods: {
     async initialize() {
-      const {data} = await ProviderFactory.getAllProviders()
-      this.providers = data
+      const saleDetails = await SaleDetailFactory.getAllSaleDetails()
+      const providers = await ProviderFactory.getAllProviders()
+      this.saleDetails = saleDetails.data
+      this.providers = providers.data
     },
 
-    editProvider(item) {
-      this.editedIndex = this.providers.indexOf(item)
-      this.editedProvider = Object.assign({}, item)
+    editSaleDetail(item) {
+      this.editedIndex = this.saleDetails.indexOf(item)
+      this.editedSaleDetail = Object.assign({}, item)
       this.dialog = true
     },
 
-    deleteProvider(item) {
-      this.editedIndex = this.providers.indexOf(item)
-      this.editedProvider = Object.assign({}, item)
+    deleteSaleDetail(item) {
+      this.editedIndex = this.saleDetails.indexOf(item)
+      this.editedSaleDetail = Object.assign({}, item)
       this.dialogDelete = true
     },
 
-    async deleteProviderConfirm() {
-      this.providers.splice(this.editedIndex, 1)
-      await ProviderFactory.deleteProvider(this.editedProvider.id)
+    async deleteSaleDetailConfirm() {
+      this.saleDetails.splice(this.editedIndex, 1)
+      await SaleDetailFactory.deleteSaleDetail(this.editedSaleDetail.id)
       this.closeDelete()
     },
 
     close() {
       this.dialog = false
       this.$nextTick(() => {
-        this.editedProvider = Object.assign({}, this.defaultProvider)
+        this.editedSaleDetail = Object.assign({}, this.defaultSaleDetail)
         this.editedIndex = -1
       })
     },
@@ -257,18 +227,19 @@ export default {
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
-        this.editedProvider = Object.assign({}, this.defaultProvider)
+        this.editedSaleDetail = Object.assign({}, this.defaultSaleDetail)
         this.editedIndex = -1
       })
     },
 
     async save() {
       if (this.editedIndex > -1) {
-        await ProviderFactory.editProvider(this.editedProvider.id, this.editedProvider)
-        Object.assign(this.providers[this.editedIndex], this.editedProvider)
+        await SaleDetailFactory.editSaleDetail(this.editedSaleDetail.id, this.editedSaleDetail)
+        Object.assign(this.saleDetails[this.editedIndex], this.editedSaleDetail)
       } else {
-        await ProviderFactory.createProvider(this.editedProvider)
-        this.providers.push(this.editedProvider)
+        console.log(this.editedSaleDetail)
+        await SaleDetailFactory.createSaleDetail(this.editedSaleDetail)
+        this.saleDetails.push(this.editedSaleDetail)
       }
       this.close()
     },

@@ -52,7 +52,7 @@
           class="py-8 px-6"
           fluid
       >
-        <router-view />
+        <router-view/>
       </v-container>
     </v-main>
   </v-app>
@@ -64,9 +64,10 @@ export default {
     drawer: null,
     links: [
       ['mdi-inbox-arrow-down', 'Home', '/'],
-      ['mdi-send', 'Order', '/orders'],
-      ['mdi-delete', 'Trash'],
-      ['mdi-alert-octagon', 'Spam'],
+      ['mdi-send', 'Order', '/order'],
+      ['mdi-note', 'Receive Note', '/inventoryReceive'],
+      ['mdi-note-outline', 'Delivery Note', '/inventoryDelivery'],
+      ['mdi-sale', 'Sale Invoice', '/sale'],
     ],
   }),
 }

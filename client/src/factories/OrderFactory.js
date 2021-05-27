@@ -2,7 +2,7 @@ import axios from "./axiosInstance";
 
 export default {
     createOrder(obj) {
-        return axios.post('/order/{staffId}/{providerId}',obj);
+        return axios.post('/order',obj);
     },
     getAllOrders(){
         return axios.get('/orders')

@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class InventoryReceiving {
+public class InventoryReceive {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +22,6 @@ public class InventoryReceiving {
     @Column
     private String name;
 
-    @OneToMany(mappedBy = "inventoryReceiving", cascade = CascadeType.ALL)
-    private List<InventoryReceivingDetail> inventoryReceivingDetails;
+    @OneToMany(mappedBy = "inventoryReceive", cascade = CascadeType.ALL)
+    private List<InventoryReceiveDetail> inventoryReceiveDetails;
 }

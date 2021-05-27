@@ -8,8 +8,6 @@
 import OrderDetail from "@/components/OrderDetail";
 
 export default {
-  components: {
-    OrderDetail
-  }
+  components: {OrderDetail}
 }
 </script>

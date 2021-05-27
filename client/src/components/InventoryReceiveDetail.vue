@@ -1,14 +1,14 @@
 <template>
   <v-data-table
       :headers="headers"
-      :items="providers"
+      :items="receiveDetails"
       class="elevation-1"
   >
     <template v-slot:top>
       <v-toolbar
           flat
       >
-        <v-toolbar-title>Provider</v-toolbar-title>
+        <v-toolbar-title>Inventory Receive</v-toolbar-title>
         <v-divider
             class="mx-4"
             inset
@@ -27,7 +27,7 @@
                 v-bind="attrs"
                 v-on="on"
             >
-              New Provider
+              New Inventory Receive
             </v-btn>
           </template>
           <v-card>
@@ -41,62 +41,33 @@
                   <v-col
                       cols="12"
                       sm="6"
-                      md="4"
+                      md="6"
                   >
-                    <v-text-field
-                        v-model="editedProvider.name"
-                        label="Provider Name"
-                    ></v-text-field>
+                    <v-select
+                        v-model="editedInventoryReceive.staff"
+                        :items="staffs"
+                        label="Staff"
+                        item-text="staff"
+                    ></v-select>
                   </v-col>
                   <v-col
                       cols="12"
                       sm="6"
-                      md="4"
+                      md="6"
                   >
-                    <v-text-field
-                        v-model="editedProvider.address"
-                        label="Address"
-                    ></v-text-field>
+                    <v-select
+                        v-model="editedInventoryReceive.provider"
+                        :items="providers"
+                        label="Provider"
+                        item-text="provider"
+                    ></v-select>
                   </v-col>
                   <v-col
                       cols="12"
-                      sm="6"
-                      md="4"
+                      sm="12"
+                      md="12"
                   >
-                    <v-text-field
-                        v-model="editedProvider.phoneNumber"
-                        label="Phone Number"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="editedProvider.fax"
-                        label="Fax"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="editedProvider.email"
-                        label="Email"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="editedProvider.contactPerson"
-                        label="Contact Person"
-                    ></v-text-field>
+                    <v-date-picker v-model="editedInventoryReceive.date"></v-date-picker>
                   </v-col>
                 </v-row>
               </v-container>
@@ -127,24 +98,29 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteProviderConfirm">OK</v-btn>
+              <v-btn color="blue darken-1" text @click="deleteInventoryReceiveConfirm">OK</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
     </template>
+    <template  v-slot:item.details="{ item }">
+      <router-link :to="{ name: 'InventoryReceiveDetail', params: { id: item.id } }">
+        Details
+      </router-link>
+    </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
           small
           class="mr-2"
-          @click="editProvider(item)"
+          @click="editInventoryReceive(item)"
       >
         mdi-pencil
       </v-icon>
       <v-icon
           small
-          @click="deleteProvider(item)"
+          @click="deleteInventoryReceive(item)"
       >
         mdi-delete
       </v-icon>
@@ -161,51 +137,44 @@
 </template>
 
 <script>
-import ProviderFactory from '@/factories/ProviderFactory'
+import InventoryReceiveFactory from '@/factories/InventoryReceiveFactory'
+import StaffFactory from '@/factories/StaffFactory'
+import ProviderFactory from "@/factories/ProviderFactory";
 
 export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
     headers: [
-      {
-        text: 'Name',
-        align: 'start',
-        sortable: false,
-        value: 'name',
-      },
-      {text: 'Address', value: 'address'},
-      {text: 'Phone Number', value: 'phoneNumber'},
-      {text: 'Fax', value: 'fax'},
-      {text: 'Email', value: 'email'},
-      {text: 'Contact Person', value: 'contactPerson'},
+      {text: 'Id', value: 'id'},
+      {text: 'Date', value: 'date'},
+      {text: 'Staff', value: 'staff'},
+      {text: 'Provider', value: 'provider'},
+      {text: 'Details', value: 'details'},
       {text: 'Actions', value: 'actions', sortable: false},
     ],
+    receiveDetails: [],
+    staffs: [],
     providers: [],
+    date: '',
     editedIndex: -1,
-    editedProvider: {
+    editedInventoryReceive: {
       id: '',
-      name: '',
-      address: '',
-      phoneNumber: '',
-      fax: '',
-      email: '',
-      contactPerson: ''
+      date: '',
+      staff: '',
+      provider: ''
     },
-    defaultProvider: {
+    defaultInventoryReceive: {
       id: '',
-      name: '',
-      address: '',
-      phoneNumber: '',
-      fax: '',
-      email: '',
-      contactPerson: ''
+      date: '',
+      staff: '',
+      provider: ''
     },
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Provider' : 'Edit Provider'
+      return this.editedIndex === -1 ? 'New InventoryReceive' : 'Edit InventoryReceive'
     },
   },
 
@@ -224,32 +193,36 @@ export default {
 
   methods: {
     async initialize() {
-      const {data} = await ProviderFactory.getAllProviders()
-      this.providers = data
+      const receiveDetails = await InventoryReceiveFactory.getAllInventoryDeliveries()
+      const staffs = await StaffFactory.getAllStaffs()
+      const providers = await ProviderFactory.getAllProviders()
+      this.receiveDetails = receiveDetails.data
+      this.staffs = staffs.data
+      this.providers = providers.data
     },
 
-    editProvider(item) {
-      this.editedIndex = this.providers.indexOf(item)
-      this.editedProvider = Object.assign({}, item)
+    editInventoryReceive(item) {
+      this.editedIndex = this.receiveDetails.indexOf(item)
+      this.editedInventoryReceive = Object.assign({}, item)
       this.dialog = true
     },
 
-    deleteProvider(item) {
-      this.editedIndex = this.providers.indexOf(item)
-      this.editedProvider = Object.assign({}, item)
+    deleteInventoryReceive(item) {
+      this.editedIndex = this.receiveDetails.indexOf(item)
+      this.editedInventoryReceive = Object.assign({}, item)
       this.dialogDelete = true
     },
 
-    async deleteProviderConfirm() {
-      this.providers.splice(this.editedIndex, 1)
-      await ProviderFactory.deleteProvider(this.editedProvider.id)
+    async deleteInventoryReceiveConfirm() {
+      this.receiveDetails.splice(this.editedIndex, 1)
+      await InventoryReceiveFactory.deleteInventoryReceive(this.editedInventoryReceive.id)
       this.closeDelete()
     },
 
     close() {
       this.dialog = false
       this.$nextTick(() => {
-        this.editedProvider = Object.assign({}, this.defaultProvider)
+        this.editedInventoryReceive = Object.assign({}, this.defaultInventoryReceive)
         this.editedIndex = -1
       })
     },
@@ -257,18 +230,19 @@ export default {
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
-        this.editedProvider = Object.assign({}, this.defaultProvider)
+        this.editedInventoryReceive = Object.assign({}, this.defaultInventoryReceive)
         this.editedIndex = -1
       })
     },
 
     async save() {
       if (this.editedIndex > -1) {
-        await ProviderFactory.editProvider(this.editedProvider.id, this.editedProvider)
-        Object.assign(this.providers[this.editedIndex], this.editedProvider)
+        await InventoryReceiveFactory.editInventoryReceive(this.editedInventoryReceive.id, this.editedInventoryReceive)
+        Object.assign(this.receiveDetails[this.editedIndex], this.editedInventoryReceive)
       } else {
-        await ProviderFactory.createProvider(this.editedProvider)
-        this.providers.push(this.editedProvider)
+        console.log(this.editedInventoryReceive)
+        await InventoryReceiveFactory.createInventoryReceive(this.editedInventoryReceive)
+        this.receiveDetails.push(this.editedInventoryReceive)
       }
       this.close()
     },

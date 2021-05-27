@@ -1,13 +1,13 @@
 <template>
   <div>
-    <Order/>
+    <Sale/>
   </div>
 </template>
 
 <script>
-import Order from "@/components/Order";
+import Sale from "@/components/Sale";
 
 export default {
-  components: {Order}
+  components: {Sale}
 }
 </script>

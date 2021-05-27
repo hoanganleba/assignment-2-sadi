@@ -11,7 +11,6 @@
   import Staff from "@/components/Staff";
   import Provider from "@/components/Provider";
   export default {
-    name: 'Home',
     components: {Provider, Staff, Customer},
   }
 </script>
