@@ -221,7 +221,7 @@ export default {
         await OrderDetailFactory.editOrderDetail(this.editedOrderDetail.id, this.editedOrderDetail)
         Object.assign(this.orderDetails[this.editedIndex], this.editedOrderDetail)
       } else {
-        await OrderDetailFactory.createOrderDetail(this.editedOrderDetail, this.id)
+        await OrderDetailFactory.createOrderDetail(this.id, this.editedOrderDetail)
         this.orderDetails.push(this.editedOrderDetail)
       }
       this.close()

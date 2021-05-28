@@ -235,7 +235,6 @@ export default {
         await OrderFactory.editOrder(this.editedOrder.id, this.editedOrder)
         Object.assign(this.orders[this.editedIndex], this.editedOrder)
       } else {
-        console.log(this.editedOrder)
         await OrderFactory.createOrder(this.editedOrder)
         this.orders.push(this.editedOrder)
       }

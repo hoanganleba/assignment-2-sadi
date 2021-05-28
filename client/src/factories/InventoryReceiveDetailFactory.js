@@ -1,8 +1,8 @@
 import axios from "./axiosInstance";
 
 export default {
-    createInventoryReceiveDetail(obj) {
-        return axios.post('/inventoryReceiveDetail',obj);
+    createInventoryReceiveDetail(inventoryId, obj) {
+        return axios.post(`/inventory/${inventoryId}/inventoryReceiveDetail`,obj);
     },
     getAllInventoryReceiveDetails(){
         return axios.get('/inventoryReceiveDetails')

@@ -98,6 +98,18 @@
                         label="Price"
                     ></v-text-field>
                   </v-col>
+                  <v-col
+                      cols="12"
+                      sm="6"
+                      md="6"
+                  >
+                    <v-select
+                        v-model="editedProduct.category"
+                        :items="categories"
+                        label="Categories"
+                        item-text="category"
+                    ></v-select>
+                  </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -157,6 +169,7 @@
 
 <script>
 import ProductFactory from '@/factories/ProductFactory'
+import CategoryFactory from "@/factories/CategoryFactory";
 
 export default {
   data: () => ({
@@ -173,6 +186,7 @@ export default {
       {text: 'Actions', value: 'actions', sortable: false},
     ],
     products: [],
+    categories: [],
     editedIndex: -1,
     editedProduct: {
       id: '',
@@ -218,7 +232,9 @@ export default {
   methods: {
     async initialize() {
       const {data} = await ProductFactory.getAllProducts()
+      const categories = await CategoryFactory.getAllCategories()
       this.products = data
+      this.categories = categories.data
     },
 
     editProduct(item) {

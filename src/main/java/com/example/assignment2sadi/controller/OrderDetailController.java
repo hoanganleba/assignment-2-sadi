@@ -32,8 +32,8 @@ public class OrderDetailController {
     }
 
     // Add orderDetail
-    @PostMapping("/orderDetail/{orderId}")
-    public Object createOrderDetail(@RequestBody OrderDetail orderDetail, @PathVariable Integer orderId) {
+    @PostMapping("/order/{orderId}/orderDetail")
+    public Object createOrderDetailByOrderId(@RequestBody OrderDetail orderDetail, @PathVariable Integer orderId) {
         return orderRepository.findById(orderId).map(order -> {
             orderDetail.setOrder(order);
             return orderDetailRepository.save(orderDetail);

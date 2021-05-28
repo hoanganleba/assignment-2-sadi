@@ -122,6 +122,7 @@
 
 <script>
 import InventoryReceiveFactory from '@/factories/InventoryReceiveFactory'
+import InventoryReceiveDetailFactory from "@/factories/InventoryReceiveDetailFactory";
 
 export default {
   data: () => ({
@@ -213,8 +214,7 @@ export default {
         await InventoryReceiveFactory.editInventoryReceive(this.editedInventoryReceiveDetail.id, this.editedInventoryReceiveDetail)
         Object.assign(this.receiveDetails[this.editedIndex], this.editedInventoryReceiveDetail)
       } else {
-        console.log(this.editedInventoryReceiveDetail)
-        await InventoryReceiveFactory.createInventoryReceive(this.editedInventoryReceiveDetail)
+        await InventoryReceiveDetailFactory.createInventoryReceive(this.id, this.editedInventoryReceiveDetail)
         this.receiveDetails.push(this.editedInventoryReceiveDetail)
       }
       this.close()

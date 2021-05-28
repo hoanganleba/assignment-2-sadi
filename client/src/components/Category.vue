@@ -149,7 +149,7 @@ export default {
 
   methods: {
     async initialize() {
-      const {data} = await CategoryFactory.getAllCategorys()
+      const {data} = await CategoryFactory.getAllCategories()
       this.categories = data
     },
 

@@ -1,7 +1,9 @@
 package com.example.assignment2sadi.controller;
 
 import com.example.assignment2sadi.model.InventoryReceiveDetail;
+import com.example.assignment2sadi.model.OrderDetail;
 import com.example.assignment2sadi.repository.InventoryReceiveDetailRepository;
+import com.example.assignment2sadi.repository.InventoryReceiveRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +14,11 @@ import java.util.List;
 public class InventoryReceiveDetailController {
 
     private final InventoryReceiveDetailRepository inventoryReceiveDetailRepository;
+    private final InventoryReceiveRepository inventoryReceiveRepository;
 
-    public InventoryReceiveDetailController(InventoryReceiveDetailRepository inventoryReceiveDetailRepository) {
+    public InventoryReceiveDetailController(InventoryReceiveDetailRepository inventoryReceiveDetailRepository, InventoryReceiveRepository inventoryReceiveRepository) {
         this.inventoryReceiveDetailRepository = inventoryReceiveDetailRepository;
+        this.inventoryReceiveRepository = inventoryReceiveRepository;
     }
 
     @GetMapping("/inventoryReceiveDetails")
@@ -32,6 +36,15 @@ public class InventoryReceiveDetailController {
     @PostMapping("/inventoryReceiveDetail")
     public Object createInventoryReceiveDetail(@RequestBody InventoryReceiveDetail inventoryReceiveDetail) {
         return inventoryReceiveDetailRepository.save(inventoryReceiveDetail);
+    }
+
+
+    @PostMapping("/inventoryReceive/{inventoryReceiveId}/inventoryReceiveDetail")
+    public Object createReceiveDetailByReceiveId(@RequestBody InventoryReceiveDetail inventoryReceiveDetail, @PathVariable Integer inventoryReceiveId) {
+        return inventoryReceiveRepository.findById(inventoryReceiveId).map(inventoryReceive -> {
+            inventoryReceiveDetail.setInventoryReceive(inventoryReceive);
+            return inventoryReceiveDetailRepository.save(inventoryReceiveDetail);
+        });
     }
 
     // Update

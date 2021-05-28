@@ -1,8 +1,8 @@
 import axios from "./axiosInstance";
 
 export default {
-    createOrderDetail(obj) {
-        return axios.post('/orderDetail',obj);
+    createOrderDetail(orderId,obj) {
+        return axios.post(`/order/${orderId}/orderDetail`,obj);
     },
     getAllOrderDetails(){
         return axios.get('/orderDetails')
