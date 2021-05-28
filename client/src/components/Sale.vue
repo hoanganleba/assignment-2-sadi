@@ -43,10 +43,24 @@
                       sm="6"
                       md="6"
                   >
-                    <v-text-field
-                        v-model="editedSale.name"
-                        label="Provider Name"
-                    ></v-text-field>
+                    <v-select
+                        v-model="editedSale.staff"
+                        :items="staffs"
+                        label="Staff"
+                        item-text="staff"
+                    ></v-select>
+                  </v-col>
+                  <v-col
+                      cols="12"
+                      sm="6"
+                      md="6"
+                  >
+                    <v-select
+                        v-model="editedSale.customer"
+                        :items="customers"
+                        label="Customer"
+                        item-text="customer"
+                    ></v-select>
                   </v-col>
                   <v-col
                       cols="12"
@@ -54,8 +68,8 @@
                       md="6"
                   >
                     <v-text-field
-                        v-model="editedSale.name"
-                        label="Provider Name"
+                        v-model="editedSale.totalPrice"
+                        label="Total Price"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -139,8 +153,8 @@ export default {
     headers: [
       {text: 'Id', value: 'id'},
       {text: 'Date', value: 'date'},
-      {text: 'Staff', value: 'staff'},
-      {text: 'Customer', value: 'customer'},
+      {text: 'Staff', value: 'staff.name'},
+      {text: 'Customer', value: 'customer.name'},
       {text: 'Total Price', value: 'totalPrice'},
       {text: 'Details', value: 'details'},
       {text: 'Actions', value: 'actions', sortable: false},

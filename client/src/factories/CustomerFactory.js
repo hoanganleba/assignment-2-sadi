@@ -4,6 +4,15 @@ export default {
     createCustomer(obj) {
         return axios.post('/customer',obj);
     },
+    searchCustomerName(search) {
+        return axios.get(`customers?search=(name:'${search}')`)
+    },
+    searchCustomerAddress(search) {
+        return axios.get(`customers?search=(address:'${search}')`)
+    },
+    searchCustomerPhoneNumber(search) {
+        return axios.get(`customers?search=(phoneNumber:'${search}')`)
+    },
     getAllCustomers(){
         return axios.get('/customers')
     },

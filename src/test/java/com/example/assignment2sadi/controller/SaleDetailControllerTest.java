@@ -2,6 +2,7 @@ package com.example.assignment2sadi.controller;
 
 import com.example.assignment2sadi.model.*;
 import com.example.assignment2sadi.repository.SaleDetailRepository;
+import com.example.assignment2sadi.repository.SaleRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,11 +21,14 @@ public class SaleDetailControllerTest {
     @Mock
     private SaleDetailRepository mockSaleDetailRepository;
 
+    @Mock
+    private SaleRepository mockSaleRepository;
+
     private SaleDetailController saleDetailControllerUnderTest;
 
     @Before
     public void setUp() {
-        saleDetailControllerUnderTest = new SaleDetailController(mockSaleDetailRepository);
+        saleDetailControllerUnderTest = new SaleDetailController(mockSaleDetailRepository, mockSaleRepository);
     }
 
     @Test

@@ -181,7 +181,7 @@ export default {
       {text: 'Brand', value: 'brand'},
       {text: 'Company', value: 'company'},
       {text: 'Description', value: 'description'},
-      {text: 'Category', value: 'category'},
+      {text: 'Category', value: 'category.name'},
       {text: 'Price', value: 'price'},
       {text: 'Actions', value: 'actions', sortable: false},
     ],

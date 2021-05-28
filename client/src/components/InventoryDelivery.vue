@@ -131,26 +131,24 @@ export default {
     headers: [
       {text: 'Id', value: 'id'},
       {text: 'Date', value: 'date'},
-      {text: 'Staff', value: 'staff'},
+      {text: 'Staff', value: 'staff.name'},
       {text: 'Details', value: 'details'},
       {text: 'Actions', value: 'actions', sortable: false},
     ],
     deliveries: [],
+    date: '',
     staffs: [],
     providers: [],
-    date: '',
     editedIndex: -1,
     editedInventoryDelivery: {
       id: '',
       date: '',
       staff: '',
-      provider: ''
     },
     defaultInventoryDelivery: {
       id: '',
       date: '',
       staff: '',
-      provider: ''
     },
   }),
 
@@ -222,7 +220,6 @@ export default {
         await InventoryDeliveryFactory.editInventoryDelivery(this.editedInventoryDelivery.id, this.editedInventoryDelivery)
         Object.assign(this.deliveries[this.editedIndex], this.editedInventoryDelivery)
       } else {
-        console.log(this.editedInventoryDelivery)
         await InventoryDeliveryFactory.createInventoryDelivery(this.editedInventoryDelivery)
         this.deliveries.push(this.editedInventoryDelivery)
       }

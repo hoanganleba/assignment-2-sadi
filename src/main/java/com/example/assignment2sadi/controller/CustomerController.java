@@ -2,6 +2,8 @@ package com.example.assignment2sadi.controller;
 
 import com.example.assignment2sadi.model.Customer;
 import com.example.assignment2sadi.repository.CustomerRepository;
+import com.sipios.springsearch.anotation.SearchSpec;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +20,8 @@ public class CustomerController {
     }
 
     @GetMapping("/customers")
-    public List<Customer> getCustomers() {
-        return customerRepository.findAll();
+    public List<Customer> getCustomers(@SearchSpec Specification<Customer> specs) {
+        return customerRepository.findAll(Specification.where(specs));
     }
 
     // Get customer by customer id

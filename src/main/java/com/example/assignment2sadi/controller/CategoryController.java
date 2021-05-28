@@ -1,6 +1,7 @@
 package com.example.assignment2sadi.controller;
 
 import com.example.assignment2sadi.model.Category;
+import com.example.assignment2sadi.model.Customer;
 import com.example.assignment2sadi.repository.CategoryRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,16 @@ public class CategoryController {
     @PostMapping("/category")
     public Object createCategory(@RequestBody Category category) {
         return categoryRepository.save(category);
+    }
+
+    // Update
+    @PutMapping("/category/{categoryId}")
+    public Object updateCategory(@RequestBody Category newCategory, @PathVariable Integer categoryId) {
+        return categoryRepository.findById(categoryId).map(category -> {
+            category.setName(newCategory.getName());
+            categoryRepository.save(category);
+            return ResponseEntity.ok(newCategory);
+        });
     }
 
     // Delete

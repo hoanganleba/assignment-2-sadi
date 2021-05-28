@@ -51,6 +51,8 @@ public class InventoryReceiveDetailController {
     @PutMapping("/inventoryReceiveDetail/{inventoryReceiveDetailId}")
     public Object updateInventoryReceiveDetail(@RequestBody InventoryReceiveDetail newInventoryReceiveDetail, @PathVariable Integer inventoryReceiveDetailId) {
         return inventoryReceiveDetailRepository.findById(inventoryReceiveDetailId).map(inventoryReceiveDetail -> {
+            inventoryReceiveDetail.setProduct(newInventoryReceiveDetail.getProduct());
+            inventoryReceiveDetail.setQuantity(newInventoryReceiveDetail.getQuantity());
             inventoryReceiveDetailRepository.save(inventoryReceiveDetail);
             return ResponseEntity.ok(newInventoryReceiveDetail);
         });

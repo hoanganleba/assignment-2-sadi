@@ -2,6 +2,7 @@ package com.example.assignment2sadi.controller;
 
 import com.example.assignment2sadi.model.SaleDetail;
 import com.example.assignment2sadi.repository.SaleDetailRepository;
+import com.example.assignment2sadi.repository.SaleRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +13,11 @@ import java.util.List;
 public class SaleDetailController {
 
     private final SaleDetailRepository saleDetailRepository;
+    private final SaleRepository saleRepository;
 
-    public SaleDetailController(SaleDetailRepository saleDetailRepository) {
+    public SaleDetailController(SaleDetailRepository saleDetailRepository, SaleRepository saleRepository) {
         this.saleDetailRepository = saleDetailRepository;
+        this.saleRepository = saleRepository;
     }
 
     @GetMapping("/saleDetails")
@@ -32,6 +35,14 @@ public class SaleDetailController {
     @PostMapping("/saleDetail")
     public Object createSaleDetail(@RequestBody SaleDetail saleDetail) {
         return saleDetailRepository.save(saleDetail);
+    }
+
+    @PostMapping("/sale/{saleId}/saleDetail")
+    public Object createSaleDetail(@RequestBody SaleDetail saleDetail, @PathVariable Integer saleId) {
+        return saleRepository.findById(saleId).map(sale -> {
+            saleDetail.setSale(sale);
+            return saleDetailRepository.save(saleDetail);
+        });
     }
 
     // Delete

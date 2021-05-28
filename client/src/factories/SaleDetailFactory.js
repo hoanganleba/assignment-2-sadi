@@ -1,8 +1,8 @@
 import axios from "./axiosInstance";
 
 export default {
-    createSaleDetail(obj) {
-        return axios.post('/saleDetail',obj);
+    createSaleDetail(saleId, obj) {
+        return axios.post(`/sale/${saleId}/saleDetail`,obj);
     },
     getAllSaleDetails(){
         return axios.get('/saleDetails')

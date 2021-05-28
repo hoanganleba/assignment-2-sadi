@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.*;
 
@@ -30,6 +31,7 @@ public class CustomerControllerTest {
     @Test
     public void testGetCustomers() {
         // Setup
+        final Specification<Customer> specs = null;
 
         // Configure CustomerRepository.findAll(...).
         final Customer customer = new Customer();
@@ -84,10 +86,10 @@ public class CustomerControllerTest {
         sale.setSaleDetails(List.of(saleDetail));
         customer.setSales(List.of(sale));
         final List<Customer> customers = List.of(customer);
-        when(mockCustomerRepository.findAll()).thenReturn(customers);
+        when(mockCustomerRepository.findAll(any(Specification.class))).thenReturn(customers);
 
         // Run the test
-        final List<Customer> result = customerControllerUnderTest.getCustomers();
+        final List<Customer> result = customerControllerUnderTest.getCustomers(null);
 
         // Verify the results
     }
@@ -95,10 +97,11 @@ public class CustomerControllerTest {
     @Test
     public void testGetCustomers_CustomerRepositoryReturnsNoItems() {
         // Setup
-        when(mockCustomerRepository.findAll()).thenReturn(Collections.emptyList());
+        final Specification<Customer> specs = null;
+        when(mockCustomerRepository.findAll(any(Specification.class))).thenReturn(Collections.emptyList());
 
         // Run the test
-        final List<Customer> result = customerControllerUnderTest.getCustomers();
+        final List<Customer> result = customerControllerUnderTest.getCustomers(specs);
 
         // Verify the results
     }

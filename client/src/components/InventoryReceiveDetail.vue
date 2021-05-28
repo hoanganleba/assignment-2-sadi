@@ -172,12 +172,12 @@ export default {
   methods: {
     async initialize() {
       const {data} = await InventoryReceiveFactory.getInventoryReceive(this.id)
-      this.receiveDetails = data.receiveDetails
+      this.receiveDetails = data.inventoryReceiveDetails
     },
 
     editInventoryReceive(item) {
       this.editedIndex = this.receiveDetails.indexOf(item)
-      this.editedInventoryReceive = Object.assign({}, item)
+      this.editedInventoryReceiveDetail = Object.assign({}, item)
       this.dialog = true
     },
 
@@ -189,7 +189,7 @@ export default {
 
     async deleteInventoryReceiveConfirm() {
       this.receiveDetails.splice(this.editedIndex, 1)
-      await InventoryReceiveFactory.deleteInventoryReceive(this.editedInventoryReceiveDetail.id)
+      await InventoryReceiveDetailFactory.deleteInventoryReceiveDetail(this.editedInventoryReceiveDetail.id)
       this.closeDelete()
     },
 
@@ -211,10 +211,10 @@ export default {
 
     async save() {
       if (this.editedIndex > -1) {
-        await InventoryReceiveFactory.editInventoryReceive(this.editedInventoryReceiveDetail.id, this.editedInventoryReceiveDetail)
+        await InventoryReceiveDetailFactory.editInventoryReceiveDetail(this.editedInventoryReceiveDetail.id, this.editedInventoryReceiveDetail)
         Object.assign(this.receiveDetails[this.editedIndex], this.editedInventoryReceiveDetail)
       } else {
-        await InventoryReceiveDetailFactory.createInventoryReceive(this.id, this.editedInventoryReceiveDetail)
+        await InventoryReceiveDetailFactory.createInventoryReceiveDetail(this.id, this.editedInventoryReceiveDetail)
         this.receiveDetails.push(this.editedInventoryReceiveDetail)
       }
       this.close()

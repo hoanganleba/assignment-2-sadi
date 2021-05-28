@@ -225,8 +225,7 @@ export default {
         await SaleDetailFactory.editSaleDetail(this.editedSaleDetail.id, this.editedSaleDetail)
         Object.assign(this.saleDetails[this.editedIndex], this.editedSaleDetail)
       } else {
-        console.log(this.editedSaleDetail)
-        await SaleDetailFactory.createSaleDetail(this.editedSaleDetail)
+        await SaleDetailFactory.createSaleDetail(this.id, this.editedSaleDetail)
         this.saleDetails.push(this.editedSaleDetail)
       }
       this.close()

@@ -143,8 +143,8 @@ export default {
     headers: [
       {text: 'Id', value: 'id'},
       {text: 'Date', value: 'date'},
-      {text: 'Staff', value: 'staff'},
-      {text: 'Provider', value: 'provider'},
+      {text: 'Staff', value: 'staff.name'},
+      {text: 'Provider', value: 'provider.name'},
       {text: 'Details', value: 'details'},
       {text: 'Actions', value: 'actions', sortable: false},
     ],

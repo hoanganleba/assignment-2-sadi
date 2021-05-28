@@ -39,6 +39,7 @@ public class InventoryReceiveController {
     public Object updateInventoryReceive(@RequestBody InventoryReceive newInventoryReceive, @PathVariable Integer inventoryReceiveId) {
         return inventoryReceiveRepository.findById(inventoryReceiveId).map(inventoryReceive -> {
             inventoryReceive.setName(newInventoryReceive.getName());
+            inventoryReceive.setDate(newInventoryReceive.getDate());
             inventoryReceiveRepository.save(inventoryReceive);
             return ResponseEntity.ok(newInventoryReceive);
         });

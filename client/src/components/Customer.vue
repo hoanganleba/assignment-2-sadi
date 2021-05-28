@@ -7,6 +7,7 @@
     <template v-slot:top>
       <v-toolbar
           flat
+          height="120px"
       >
         <v-toolbar-title>Customer</v-toolbar-title>
         <v-divider
@@ -14,6 +15,23 @@
             inset
             vertical
         ></v-divider>
+        <div class="d-flex align-items-center">
+          <v-text-field
+              class="mx-1"
+              outlined
+              v-model="search"
+              label="Search"
+          ></v-text-field>
+          <v-select
+              class="mx-1"
+              outlined
+              v-model="select"
+              :items="filters"
+              label="Filter"
+          ></v-select>
+          <v-btn class="mt-2 ml-3" @click="searchCustomer">Search</v-btn>
+          <v-btn class="mt-2 ml-3" @click="reset">Reset</v-btn>
+        </div>
         <v-spacer></v-spacer>
         <v-dialog
             v-model="dialog"
@@ -177,7 +195,11 @@ export default {
       {text: 'Actions', value: 'actions', sortable: false},
     ],
     customers: [],
+    filters: ['Name', 'Address', 'Phone Number'],
+    select: '',
     editedIndex: -1,
+    search: '',
+    searchType: '',
     editedCustomer: {
       id: '',
       name: '',
@@ -233,6 +255,35 @@ export default {
       this.editedIndex = this.customers.indexOf(item)
       this.editedCustomer = Object.assign({}, item)
       this.dialogDelete = true
+    },
+
+    async reset() {
+      const customers = await CustomerFactory.getAllCustomers()
+      return this.customers = customers.data
+    },
+
+    async searchCustomer() {
+      switch (this.select) {
+        case 'Name': {
+          const {data} = await CustomerFactory.searchCustomerName(this.search)
+          this.customers = data
+          break;
+        }
+        case 'Address': {
+          const {data} = await CustomerFactory.searchCustomerAddress(this.search)
+          this.customers = data
+          break;
+        }
+        case 'PhoneNumber': {
+          const {data} = await CustomerFactory.searchCustomerPhoneNumber(this.search)
+          this.customers = data
+          break;
+        }
+        default: {
+          const customers = await CustomerFactory.getAllCustomers()
+          return this.customers = customers.data
+        }
+      }
     },
 
     async deleteCustomerConfirm() {

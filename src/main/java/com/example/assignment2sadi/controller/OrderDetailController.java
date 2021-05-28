@@ -40,6 +40,16 @@ public class OrderDetailController {
         });
     }
 
+    @PutMapping("/orderDetail/{orderDetailId}")
+    public Object updateOrderDetail(@RequestBody OrderDetail newOrderDetail, @PathVariable Integer orderDetailId) {
+        return orderDetailRepository.findById(orderDetailId).map(orderDetail -> {
+            orderDetail.setPrice(newOrderDetail.getPrice());
+            orderDetail.setProduct(newOrderDetail.getProduct());
+            orderDetail.setQuantity(newOrderDetail.getQuantity());
+            return orderDetailRepository.save(orderDetail);
+        });
+    }
+
     // Delete
     @DeleteMapping("/orderDetail/{orderDetailId}")
     public void deleteOrderDetail(@PathVariable Integer orderDetailId) {

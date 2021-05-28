@@ -34,6 +34,16 @@ public class OrderController {
         return orderRepository.save(order);
     }
 
+    @PutMapping("/order/{orderId}")
+    public Object updateOrderById(@RequestBody Order newOrder, @PathVariable Integer orderId) {
+        return orderRepository.findById(orderId).map(order -> {
+            order.setDate(newOrder.getDate());
+            order.setStaff(newOrder.getStaff());
+            order.setProvider(newOrder.getProvider());
+            return ResponseEntity.ok(newOrder);
+        });
+    }
+
     // Delete
     @DeleteMapping("/order/{orderId}")
     public void deleteOrder(@PathVariable Integer orderId) {

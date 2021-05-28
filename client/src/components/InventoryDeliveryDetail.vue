@@ -44,7 +44,7 @@
                       md="6"
                   >
                     <v-text-field
-                        v-model="editedInventoryDelivery.product"
+                        v-model="editedInventoryDeliveryDetail.product"
                         label="Product"
                     ></v-text-field>
                   </v-col>
@@ -54,7 +54,7 @@
                       md="6"
                   >
                     <v-text-field
-                        v-model="editedInventoryDelivery.quantity"
+                        v-model="editedInventoryDeliveryDetail.quantity"
                         label="Quantity"
                     ></v-text-field>
                   </v-col>
@@ -117,6 +117,7 @@
 
 <script>
 import InventoryDeliveryFactory from '@/factories/InventoryDeliveryFactory'
+import InventoryDeliveryDetailFactory from "@/factories/InventoryDeliveryDetailFactory";
 
 export default {
   data: () => ({
@@ -130,12 +131,12 @@ export default {
     ],
     deliveryDetails: [],
     editedIndex: -1,
-    editedInventoryDelivery: {
+    editedInventoryDeliveryDetail: {
       id: '',
       product: '',
       quantity: ''
     },
-    defaultInventoryDelivery: {
+    defaultInventoryDeliveryDetail: {
       id: '',
       product: '',
       quantity: ''
@@ -166,31 +167,31 @@ export default {
   methods: {
     async initialize() {
       const {data} = await InventoryDeliveryFactory.getInventoryDelivery(this.id)
-      this.deliveryDetails = data.deliveryDetails
+      this.deliveryDetails = data.inventoryDeliveryDetail
     },
 
     editInventoryDelivery(item) {
       this.editedIndex = this.deliveryDetails.indexOf(item)
-      this.editedInventoryDelivery = Object.assign({}, item)
+      this.editedInventoryDeliveryDetail = Object.assign({}, item)
       this.dialog = true
     },
 
     deleteInventoryDelivery(item) {
       this.editedIndex = this.deliveryDetails.indexOf(item)
-      this.editedInventoryDelivery = Object.assign({}, item)
+      this.editedInventoryDeliveryDetail = Object.assign({}, item)
       this.dialogDelete = true
     },
 
     async deleteInventoryDeliveryConfirm() {
       this.deliveryDetails.splice(this.editedIndex, 1)
-      await InventoryDeliveryFactory.deleteInventoryDelivery(this.editedInventoryDelivery.id)
+      await InventoryDeliveryDetailFactory.deleteInventoryDeliveryDetail(this.editedInventoryDeliveryDetail.id)
       this.closeDelete()
     },
 
     close() {
       this.dialog = false
       this.$nextTick(() => {
-        this.editedInventoryDelivery = Object.assign({}, this.defaultInventoryDelivery)
+        this.editedInventoryDeliveryDetail = Object.assign({}, this.defaultInventoryDeliveryDetail)
         this.editedIndex = -1
       })
     },
@@ -198,19 +199,18 @@ export default {
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
-        this.editedInventoryDelivery = Object.assign({}, this.defaultInventoryDelivery)
+        this.editedInventoryDeliveryDetail = Object.assign({}, this.defaultInventoryDeliveryDetail)
         this.editedIndex = -1
       })
     },
 
     async save() {
       if (this.editedIndex > -1) {
-        await InventoryDeliveryFactory.editInventoryDelivery(this.editedInventoryDelivery.id, this.editedInventoryDelivery)
-        Object.assign(this.deliveryDetails[this.editedIndex], this.editedInventoryDelivery)
+        await InventoryDeliveryDetailFactory.editInventoryDeliveryDetail(this.editedInventoryDeliveryDetail.id, this.editedInventoryDeliveryDetail)
+        Object.assign(this.deliveryDetails[this.editedIndex], this.editedInventoryDeliveryDetail)
       } else {
-        console.log(this.editedInventoryDelivery)
-        await InventoryDeliveryFactory.createInventoryDelivery(this.editedInventoryDelivery)
-        this.deliveryDetails.push(this.editedInventoryDelivery)
+        await InventoryDeliveryDetailFactory.createInventoryDeliveryDetail(this.id, this.editedInventoryDeliveryDetail)
+        this.deliveryDetails.push(this.editedInventoryDeliveryDetail)
       }
       this.close()
     },
