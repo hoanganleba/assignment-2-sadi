@@ -5,10 +5,10 @@ import Order from "@/views/Order";
 import OrderDetail from "@/views/OrderDetail";
 import Sale from "@/views/Sale";
 import SaleDetail from "@/views/SaleDetail";
-import InventoryReceive from "@/components/InventoryReceive";
-import InventoryDelivery from "@/components/InventoryDelivery";
-import InventoryReceiveDetail from "@/components/InventoryReceiveDetail";
-import InventoryDeliveryDetail from "@/components/InventoryDeliveryDetail";
+import InventoryReceive from "@/views/InventoryReceive";
+import InventoryDelivery from "@/views/InventoryDelivery";
+import InventoryReceiveDetail from "@/views/InventoryReceiveDetail";
+import InventoryDeliveryDetail from "@/views/InventoryDeliveryDetail";
 
 Vue.use(VueRouter)
 
@@ -44,7 +44,7 @@ const routes = [
     component: InventoryReceive
   },
   {
-    path: '/inventoryReceive/:id',
+    path: '/inventoryReceiveDetail/:id',
     name: 'InventoryReceiveDetail',
     component: InventoryReceiveDetail
   },

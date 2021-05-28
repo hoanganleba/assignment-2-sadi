@@ -1,14 +1,14 @@
 <template>
   <v-data-table
       :headers="headers"
-      :items="receiveDetails"
+      :items="categories"
       class="elevation-1"
   >
     <template v-slot:top>
       <v-toolbar
           flat
       >
-        <v-toolbar-title>Inventory Receive Detail</v-toolbar-title>
+        <v-toolbar-title>Category</v-toolbar-title>
         <v-divider
             class="mx-4"
             inset
@@ -27,7 +27,7 @@
                 v-bind="attrs"
                 v-on="on"
             >
-              New Inventory Receive Detail
+              New Category
             </v-btn>
           </template>
           <v-card>
@@ -41,21 +41,11 @@
                   <v-col
                       cols="12"
                       sm="6"
-                      md="6"
+                      md="4"
                   >
                     <v-text-field
-                        v-model="editedInventoryReceiveDetail.product"
-                        label="Product"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                  >
-                    <v-text-field
-                        v-model="editedInventoryReceiveDetail.quantity"
-                        label="Quantity"
+                        v-model="editedCategory.name"
+                        label="Category Name"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -87,29 +77,24 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteInventoryReceiveConfirm">OK</v-btn>
+              <v-btn color="blue darken-1" text @click="deleteCategoryConfirm">OK</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
     </template>
-    <template  v-slot:item.details="{ item }">
-      <router-link :to="{ name: 'InventoryReceiveDetail', params: { id: item.id } }">
-        Details
-      </router-link>
-    </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
           small
           class="mr-2"
-          @click="editInventoryReceive(item)"
+          @click="editCategory(item)"
       >
         mdi-pencil
       </v-icon>
       <v-icon
           small
-          @click="deleteInventoryReceive(item)"
+          @click="deleteCategory(item)"
       >
         mdi-delete
       </v-icon>
@@ -121,37 +106,31 @@
 </template>
 
 <script>
-import InventoryReceiveFactory from '@/factories/InventoryReceiveFactory'
+import CategoryFactory from '@/factories/CategoryFactory'
 
 export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
     headers: [
-      {text: 'Id', value: 'id'},
-      {text: 'Product', value: 'product'},
-      {text: 'Quantity', value: 'quantity'},
+      {text: 'Name', value: 'name',},
       {text: 'Actions', value: 'actions', sortable: false},
     ],
-    receiveDetails: [],
+    categories: [],
     editedIndex: -1,
-    editedInventoryReceiveDetail: {
+    editedCategory: {
       id: '',
-      product: '',
-      quantity: ''
+      name: '',
     },
-    defaultInventoryReceiveDetail: {
+    defaultCategory: {
       id: '',
-      product: '',
-      quantity: ''
+      name: '',
     },
   }),
 
-  props: ['id'],
-
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Inventory Receive Detail' : 'Edit Inventory Receive Detail'
+      return this.editedIndex === -1 ? 'New Category' : 'Edit Category'
     },
   },
 
@@ -170,32 +149,32 @@ export default {
 
   methods: {
     async initialize() {
-      const {data} = await InventoryReceiveFactory.getInventoryReceive(this.id)
-      this.receiveDetails = data.receiveDetails
+      const {data} = await CategoryFactory.getAllCategorys()
+      this.categories = data
     },
 
-    editInventoryReceive(item) {
-      this.editedIndex = this.receiveDetails.indexOf(item)
-      this.editedInventoryReceive = Object.assign({}, item)
+    editCategory(item) {
+      this.editedIndex = this.categories.indexOf(item)
+      this.editedCategory = Object.assign({}, item)
       this.dialog = true
     },
 
-    deleteInventoryReceive(item) {
-      this.editedIndex = this.receiveDetails.indexOf(item)
-      this.editedInventoryReceiveDetail = Object.assign({}, item)
+    deleteCategory(item) {
+      this.editedIndex = this.categories.indexOf(item)
+      this.editedCategory = Object.assign({}, item)
       this.dialogDelete = true
     },
 
-    async deleteInventoryReceiveConfirm() {
-      this.receiveDetails.splice(this.editedIndex, 1)
-      await InventoryReceiveFactory.deleteInventoryReceive(this.editedInventoryReceiveDetail.id)
+    async deleteCategoryConfirm() {
+      this.categories.splice(this.editedIndex, 1)
+      await CategoryFactory.deleteCategory(this.editedCategory.id)
       this.closeDelete()
     },
 
     close() {
       this.dialog = false
       this.$nextTick(() => {
-        this.editedInventoryReceiveDetail = Object.assign({}, this.defaultInventoryReceiveDetail)
+        this.editedCategory = Object.assign({}, this.defaultCategory)
         this.editedIndex = -1
       })
     },
@@ -203,19 +182,18 @@ export default {
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
-        this.editedInventoryReceiveDetail = Object.assign({}, this.defaultInventoryReceiveDetail)
+        this.editedCategory = Object.assign({}, this.defaultCategory)
         this.editedIndex = -1
       })
     },
 
     async save() {
       if (this.editedIndex > -1) {
-        await InventoryReceiveFactory.editInventoryReceive(this.editedInventoryReceiveDetail.id, this.editedInventoryReceiveDetail)
-        Object.assign(this.receiveDetails[this.editedIndex], this.editedInventoryReceiveDetail)
+        await CategoryFactory.editCategory(this.editedCategory.id, this.editedCategory)
+        Object.assign(this.categories[this.editedIndex], this.editedCategory)
       } else {
-        console.log(this.editedInventoryReceiveDetail)
-        await InventoryReceiveFactory.createInventoryReceive(this.editedInventoryReceiveDetail)
-        this.receiveDetails.push(this.editedInventoryReceiveDetail)
+        await CategoryFactory.createCategory(this.editedCategory)
+        this.categories.push(this.editedCategory)
       }
       this.close()
     },

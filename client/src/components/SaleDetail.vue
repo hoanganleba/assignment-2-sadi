@@ -104,11 +104,6 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template  v-slot:item.details="{ item }">
-      <router-link :to="{ name: 'SaleDetailDetail', params: { id: item.id } }">
-        Details
-      </router-link>
-    </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
           small
@@ -125,12 +120,7 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn
-          color="primary"
-          @click="initialize"
-      >
-        Reset
-      </v-btn>
+      No Data
     </template>
   </v-data-table>
 </template>
@@ -138,6 +128,7 @@
 <script>
 import SaleDetailFactory from '@/factories/SaleDetailFactory'
 import ProviderFactory from "@/factories/ProviderFactory";
+import SaleFactory from "@/factories/SaleFactory";
 
 export default {
   data: () => ({
@@ -151,9 +142,6 @@ export default {
       {text: 'Actions', value: 'actions', sortable: false},
     ],
     saleDetails: [],
-    products: [],
-    providers: [],
-    date: '',
     editedIndex: -1,
     editedSaleDetail: {
       id: '',
@@ -192,9 +180,9 @@ export default {
 
   methods: {
     async initialize() {
-      const saleDetails = await SaleDetailFactory.getAllSaleDetails()
+      const {data} = await SaleFactory.getSale(this.id)
       const providers = await ProviderFactory.getAllProviders()
-      this.saleDetails = saleDetails.data
+      this.saleDetails = data.saleDetails
       this.providers = providers.data
     },
 

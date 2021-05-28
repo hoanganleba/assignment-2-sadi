@@ -1,14 +1,14 @@
 <template>
   <v-data-table
       :headers="headers"
-      :items="receiveDetails"
+      :items="products"
       class="elevation-1"
   >
     <template v-slot:top>
       <v-toolbar
           flat
       >
-        <v-toolbar-title>Inventory Receive Detail</v-toolbar-title>
+        <v-toolbar-title>Product</v-toolbar-title>
         <v-divider
             class="mx-4"
             inset
@@ -27,7 +27,7 @@
                 v-bind="attrs"
                 v-on="on"
             >
-              New Inventory Receive Detail
+              New Product
             </v-btn>
           </template>
           <v-card>
@@ -41,21 +41,61 @@
                   <v-col
                       cols="12"
                       sm="6"
-                      md="6"
+                      md="4"
                   >
                     <v-text-field
-                        v-model="editedInventoryReceiveDetail.product"
-                        label="Product"
+                        v-model="editedProduct.name"
+                        label="Product Name"
                     ></v-text-field>
                   </v-col>
                   <v-col
                       cols="12"
                       sm="6"
-                      md="6"
+                      md="4"
                   >
                     <v-text-field
-                        v-model="editedInventoryReceiveDetail.quantity"
-                        label="Quantity"
+                        v-model="editedProduct.model"
+                        label="Model"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                  >
+                    <v-text-field
+                        v-model="editedProduct.brand"
+                        label="Brand"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                  >
+                    <v-text-field
+                        v-model="editedProduct.company"
+                        label="Company"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                  >
+                    <v-text-field
+                        v-model="editedProduct.description"
+                        label="Description"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                  >
+                    <v-text-field
+                        v-model="editedProduct.price"
+                        label="Price"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -87,29 +127,24 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteInventoryReceiveConfirm">OK</v-btn>
+              <v-btn color="blue darken-1" text @click="deleteProductConfirm">OK</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
     </template>
-    <template  v-slot:item.details="{ item }">
-      <router-link :to="{ name: 'InventoryReceiveDetail', params: { id: item.id } }">
-        Details
-      </router-link>
-    </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
           small
           class="mr-2"
-          @click="editInventoryReceive(item)"
+          @click="editProduct(item)"
       >
         mdi-pencil
       </v-icon>
       <v-icon
           small
-          @click="deleteInventoryReceive(item)"
+          @click="deleteProduct(item)"
       >
         mdi-delete
       </v-icon>
@@ -121,37 +156,49 @@
 </template>
 
 <script>
-import InventoryReceiveFactory from '@/factories/InventoryReceiveFactory'
+import ProductFactory from '@/factories/ProductFactory'
 
 export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
     headers: [
-      {text: 'Id', value: 'id'},
-      {text: 'Product', value: 'product'},
-      {text: 'Quantity', value: 'quantity'},
+      {text: 'Name', value: 'name',},
+      {text: 'Model', value: 'model'},
+      {text: 'Brand', value: 'brand'},
+      {text: 'Company', value: 'company'},
+      {text: 'Description', value: 'description'},
+      {text: 'Category', value: 'category'},
+      {text: 'Price', value: 'price'},
       {text: 'Actions', value: 'actions', sortable: false},
     ],
-    receiveDetails: [],
+    products: [],
     editedIndex: -1,
-    editedInventoryReceiveDetail: {
+    editedProduct: {
       id: '',
-      product: '',
-      quantity: ''
+      name: '',
+      model: '',
+      brand: '',
+      company: '',
+      description: '',
+      category: '',
+      price: ''
     },
-    defaultInventoryReceiveDetail: {
+    defaultProduct: {
       id: '',
-      product: '',
-      quantity: ''
+      name: '',
+      model: '',
+      brand: '',
+      company: '',
+      description: '',
+      category: '',
+      price: ''
     },
   }),
 
-  props: ['id'],
-
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Inventory Receive Detail' : 'Edit Inventory Receive Detail'
+      return this.editedIndex === -1 ? 'New Product' : 'Edit Product'
     },
   },
 
@@ -170,32 +217,32 @@ export default {
 
   methods: {
     async initialize() {
-      const {data} = await InventoryReceiveFactory.getInventoryReceive(this.id)
-      this.receiveDetails = data.receiveDetails
+      const {data} = await ProductFactory.getAllProducts()
+      this.products = data
     },
 
-    editInventoryReceive(item) {
-      this.editedIndex = this.receiveDetails.indexOf(item)
-      this.editedInventoryReceive = Object.assign({}, item)
+    editProduct(item) {
+      this.editedIndex = this.products.indexOf(item)
+      this.editedProduct = Object.assign({}, item)
       this.dialog = true
     },
 
-    deleteInventoryReceive(item) {
-      this.editedIndex = this.receiveDetails.indexOf(item)
-      this.editedInventoryReceiveDetail = Object.assign({}, item)
+    deleteProduct(item) {
+      this.editedIndex = this.products.indexOf(item)
+      this.editedProduct = Object.assign({}, item)
       this.dialogDelete = true
     },
 
-    async deleteInventoryReceiveConfirm() {
-      this.receiveDetails.splice(this.editedIndex, 1)
-      await InventoryReceiveFactory.deleteInventoryReceive(this.editedInventoryReceiveDetail.id)
+    async deleteProductConfirm() {
+      this.products.splice(this.editedIndex, 1)
+      await ProductFactory.deleteProduct(this.editedProduct.id)
       this.closeDelete()
     },
 
     close() {
       this.dialog = false
       this.$nextTick(() => {
-        this.editedInventoryReceiveDetail = Object.assign({}, this.defaultInventoryReceiveDetail)
+        this.editedProduct = Object.assign({}, this.defaultProduct)
         this.editedIndex = -1
       })
     },
@@ -203,19 +250,18 @@ export default {
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
-        this.editedInventoryReceiveDetail = Object.assign({}, this.defaultInventoryReceiveDetail)
+        this.editedProduct = Object.assign({}, this.defaultProduct)
         this.editedIndex = -1
       })
     },
 
     async save() {
       if (this.editedIndex > -1) {
-        await InventoryReceiveFactory.editInventoryReceive(this.editedInventoryReceiveDetail.id, this.editedInventoryReceiveDetail)
-        Object.assign(this.receiveDetails[this.editedIndex], this.editedInventoryReceiveDetail)
+        await ProductFactory.editProduct(this.editedProduct.id, this.editedProduct)
+        Object.assign(this.products[this.editedIndex], this.editedProduct)
       } else {
-        console.log(this.editedInventoryReceiveDetail)
-        await InventoryReceiveFactory.createInventoryReceive(this.editedInventoryReceiveDetail)
-        this.receiveDetails.push(this.editedInventoryReceiveDetail)
+        await ProductFactory.createProduct(this.editedProduct)
+        this.products.push(this.editedProduct)
       }
       this.close()
     },

@@ -43,24 +43,10 @@
                       sm="6"
                       md="6"
                   >
-                    <v-select
-                        v-model="editedInventoryReceive.staff"
-                        :items="staffs"
-                        label="Staff"
-                        item-text="staff"
-                    ></v-select>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                  >
-                    <v-select
-                        v-model="editedInventoryReceive.provider"
-                        :items="providers"
-                        label="Provider"
-                        item-text="provider"
-                    ></v-select>
+                    <v-text-field
+                        v-model="editedInventoryReceive.name"
+                        label="Name"
+                    ></v-text-field>
                   </v-col>
                   <v-col
                       cols="12"
@@ -126,20 +112,13 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn
-          color="primary"
-          @click="initialize"
-      >
-        Reset
-      </v-btn>
+      No Data
     </template>
   </v-data-table>
 </template>
 
 <script>
 import InventoryReceiveFactory from '@/factories/InventoryReceiveFactory'
-import StaffFactory from '@/factories/StaffFactory'
-import ProviderFactory from "@/factories/ProviderFactory";
 
 export default {
   data: () => ({
@@ -148,27 +127,22 @@ export default {
     headers: [
       {text: 'Id', value: 'id'},
       {text: 'Date', value: 'date'},
-      {text: 'Staff', value: 'staff'},
-      {text: 'Provider', value: 'provider'},
+      {text: 'Name', value: 'name'},
       {text: 'Details', value: 'details'},
       {text: 'Actions', value: 'actions', sortable: false},
     ],
     receives: [],
-    staffs: [],
-    providers: [],
     date: '',
     editedIndex: -1,
     editedInventoryReceive: {
       id: '',
       date: '',
-      staff: '',
-      provider: ''
+      name: ''
     },
     defaultInventoryReceive: {
       id: '',
       date: '',
-      staff: '',
-      provider: ''
+      name: ''
     },
   }),
 
@@ -194,11 +168,7 @@ export default {
   methods: {
     async initialize() {
       const receives = await InventoryReceiveFactory.getAllInventoryReceives()
-      const staffs = await StaffFactory.getAllStaffs()
-      const providers = await ProviderFactory.getAllProviders()
       this.receives = receives.data
-      this.staffs = staffs.data
-      this.providers = providers.data
     },
 
     editInventoryReceive(item) {

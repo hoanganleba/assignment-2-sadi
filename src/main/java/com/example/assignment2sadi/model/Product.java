@@ -29,7 +29,7 @@ public class Product {
     @Column
     private String description;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 

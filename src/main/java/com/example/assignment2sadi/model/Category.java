@@ -1,9 +1,11 @@
 package com.example.assignment2sadi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,6 +19,8 @@ public class Category {
     @Column
     private String name;
 
-    @OneToOne(mappedBy = "category")
-    private Product product;
+    @Column
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Product> product;
 }

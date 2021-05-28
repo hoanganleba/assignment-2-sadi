@@ -52,18 +52,6 @@
                   </v-col>
                   <v-col
                       cols="12"
-                      sm="6"
-                      md="6"
-                  >
-                    <v-select
-                        v-model="editedInventoryDelivery.provider"
-                        :items="providers"
-                        label="Provider"
-                        item-text="provider"
-                    ></v-select>
-                  </v-col>
-                  <v-col
-                      cols="12"
                       sm="12"
                       md="12"
                   >
@@ -126,12 +114,7 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn
-          color="primary"
-          @click="initialize"
-      >
-        Reset
-      </v-btn>
+      No Data
     </template>
   </v-data-table>
 </template>
@@ -149,7 +132,6 @@ export default {
       {text: 'Id', value: 'id'},
       {text: 'Date', value: 'date'},
       {text: 'Staff', value: 'staff'},
-      {text: 'Provider', value: 'provider'},
       {text: 'Details', value: 'details'},
       {text: 'Actions', value: 'actions', sortable: false},
     ],
@@ -174,7 +156,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New InventoryDelivery' : 'Edit InventoryDelivery'
+      return this.editedIndex === -1 ? 'New Inventory Delivery' : 'Edit Inventory Delivery'
     },
   },
 

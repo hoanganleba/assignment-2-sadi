@@ -130,12 +130,7 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn
-          color="primary"
-          @click="initialize"
-      >
-        Reset
-      </v-btn>
+      No Data
     </template>
   </v-data-table>
 </template>

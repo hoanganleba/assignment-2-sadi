@@ -8,7 +8,7 @@
       <v-toolbar
           flat
       >
-        <v-toolbar-title>Inventory Delivery</v-toolbar-title>
+        <v-toolbar-title>Inventory Delivery Detail</v-toolbar-title>
         <v-divider
             class="mx-4"
             inset
@@ -27,7 +27,7 @@
                 v-bind="attrs"
                 v-on="on"
             >
-              New Inventory Delivery
+              New Inventory Delivery Detail
             </v-btn>
           </template>
           <v-card>
@@ -43,31 +43,20 @@
                       sm="6"
                       md="6"
                   >
-                    <v-select
-                        v-model="editedInventoryDelivery.staff"
-                        :items="staffs"
-                        label="Staff"
-                        item-text="staff"
-                    ></v-select>
+                    <v-text-field
+                        v-model="editedInventoryDelivery.product"
+                        label="Product"
+                    ></v-text-field>
                   </v-col>
                   <v-col
                       cols="12"
                       sm="6"
                       md="6"
                   >
-                    <v-select
-                        v-model="editedInventoryDelivery.provider"
-                        :items="providers"
-                        label="Provider"
-                        item-text="provider"
-                    ></v-select>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="12"
-                      md="12"
-                  >
-                    <v-date-picker v-model="editedInventoryDelivery.date"></v-date-picker>
+                    <v-text-field
+                        v-model="editedInventoryDelivery.quantity"
+                        label="Quantity"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -105,11 +94,6 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template  v-slot:item.details="{ item }">
-      <router-link :to="{ name: 'InventoryDeliveryDetail', params: { id: item.id } }">
-        Details
-      </router-link>
-    </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
           small
@@ -126,20 +110,13 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn
-          color="primary"
-          @click="initialize"
-      >
-        Reset
-      </v-btn>
+      No Data
     </template>
   </v-data-table>
 </template>
 
 <script>
 import InventoryDeliveryFactory from '@/factories/InventoryDeliveryFactory'
-import StaffFactory from '@/factories/StaffFactory'
-import ProviderFactory from "@/factories/ProviderFactory";
 
 export default {
   data: () => ({
@@ -147,34 +124,29 @@ export default {
     dialogDelete: false,
     headers: [
       {text: 'Id', value: 'id'},
-      {text: 'Date', value: 'date'},
-      {text: 'Staff', value: 'staff'},
-      {text: 'Provider', value: 'provider'},
-      {text: 'Details', value: 'details'},
+      {text: 'Product', value: 'product'},
+      {text: 'Quantity', value: 'quantity'},
       {text: 'Actions', value: 'actions', sortable: false},
     ],
     deliveryDetails: [],
-    staffs: [],
-    providers: [],
-    date: '',
     editedIndex: -1,
     editedInventoryDelivery: {
       id: '',
-      date: '',
-      staff: '',
-      provider: ''
+      product: '',
+      quantity: ''
     },
     defaultInventoryDelivery: {
       id: '',
-      date: '',
-      staff: '',
-      provider: ''
+      product: '',
+      quantity: ''
     },
   }),
 
+  props: ['id'],
+
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New InventoryDelivery' : 'Edit InventoryDelivery'
+      return this.editedIndex === -1 ? 'New Inventory Delivery Detail' : 'Edit Inventory Delivery Detail'
     },
   },
 
@@ -193,12 +165,8 @@ export default {
 
   methods: {
     async initialize() {
-      const deliveryDetails = await InventoryDeliveryFactory.getAllInventoryDeliveries()
-      const staffs = await StaffFactory.getAllStaffs()
-      const providers = await ProviderFactory.getAllProviders()
-      this.deliveryDetails = deliveryDetails.data
-      this.staffs = staffs.data
-      this.providers = providers.data
+      const {data} = await InventoryDeliveryFactory.getInventoryDelivery(this.id)
+      this.deliveryDetails = data.deliveryDetails
     },
 
     editInventoryDelivery(item) {
