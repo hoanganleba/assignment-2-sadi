@@ -20,8 +20,6 @@ public class InventoryDeliveryDetailControllerTest {
 
     @Mock
     private InventoryDeliveryDetailRepository mockInventoryDeliveryDetailRepository;
-
-    @Mock
     private InventoryDeliveryRepository mockInventoryDeliveryRepository;
 
     private InventoryDeliveryDetailController inventoryDeliveryDetailControllerUnderTest;
@@ -32,10 +30,8 @@ public class InventoryDeliveryDetailControllerTest {
     }
 
     @Test
-    public void testGetInventoryDeliveryDetails() {
+    public void testCreateInventoryDeliveryDetail() {
         // Setup
-
-        // Configure InventoryDeliveryDetailRepository.findAll(...).
         final InventoryDeliveryDetail inventoryDeliveryDetail = new InventoryDeliveryDetail();
         inventoryDeliveryDetail.setId(0);
         inventoryDeliveryDetail.setProduct("product");
@@ -43,7 +39,6 @@ public class InventoryDeliveryDetailControllerTest {
         final InventoryDelivery inventoryDelivery = new InventoryDelivery();
         inventoryDelivery.setId(0);
         inventoryDelivery.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        inventoryDelivery.setName("name");
         final Staff staff = new Staff();
         staff.setId(0);
         staff.setName("name");
@@ -98,24 +93,298 @@ public class InventoryDeliveryDetailControllerTest {
         inventoryDelivery.setStaff(staff);
         inventoryDelivery.setInventoryDeliveryDetail(List.of(new InventoryDeliveryDetail()));
         inventoryDeliveryDetail.setInventoryDelivery(inventoryDelivery);
-        final List<InventoryDeliveryDetail> inventoryDeliveryDetails = List.of(inventoryDeliveryDetail);
-        when(mockInventoryDeliveryDetailRepository.findAll()).thenReturn(inventoryDeliveryDetails);
+
+        // Configure InventoryDeliveryDetailRepository.save(...).
+        final InventoryDeliveryDetail inventoryDeliveryDetail1 = new InventoryDeliveryDetail();
+        inventoryDeliveryDetail1.setId(0);
+        inventoryDeliveryDetail1.setProduct("product");
+        inventoryDeliveryDetail1.setQuantity(0);
+        final InventoryDelivery inventoryDelivery1 = new InventoryDelivery();
+        inventoryDelivery1.setId(0);
+        inventoryDelivery1.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
+        final Staff staff1 = new Staff();
+        staff1.setId(0);
+        staff1.setName("name");
+        staff1.setAddress("address");
+        staff1.setPhoneNumber("phoneNumber");
+        staff1.setEmail("email");
+        final Order order1 = new Order();
+        order1.setId(0);
+        order1.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
+        order1.setStaff(new Staff());
+        final Provider provider1 = new Provider();
+        provider1.setId(0);
+        provider1.setName("name");
+        provider1.setAddress("address");
+        provider1.setPhoneNumber("phoneNumber");
+        provider1.setFax("fax");
+        provider1.setEmail("email");
+        provider1.setContactPerson("contactPerson");
+        provider1.setOrder(List.of(new Order()));
+        order1.setProvider(provider1);
+        final OrderDetail orderDetail1 = new OrderDetail();
+        orderDetail1.setId(0);
+        orderDetail1.setProduct("product");
+        orderDetail1.setQuantity(0);
+        orderDetail1.setPrice("price");
+        orderDetail1.setOrder(new Order());
+        order1.setOrderDetails(List.of(orderDetail1));
+        staff1.setOrder(List.of(order1));
+        final Sale sale1 = new Sale();
+        sale1.setId(0);
+        sale1.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
+        sale1.setTotalPrice("totalPrice");
+        final Customer customer1 = new Customer();
+        customer1.setId(0);
+        customer1.setName("name");
+        customer1.setAddress("address");
+        customer1.setPhoneNumber("phoneNumber");
+        customer1.setFax("fax");
+        customer1.setEmail("email");
+        customer1.setContactPerson("contactPerson");
+        customer1.setSales(List.of(new Sale()));
+        sale1.setCustomer(customer1);
+        sale1.setStaff(new Staff());
+        final SaleDetail saleDetail1 = new SaleDetail();
+        saleDetail1.setId(0);
+        saleDetail1.setProduct("product");
+        saleDetail1.setQuantity("quantity");
+        saleDetail1.setPrice("price");
+        saleDetail1.setSale(new Sale());
+        sale1.setSaleDetails(List.of(saleDetail1));
+        staff1.setSales(List.of(sale1));
+        inventoryDelivery1.setStaff(staff1);
+        inventoryDelivery1.setInventoryDeliveryDetail(List.of(new InventoryDeliveryDetail()));
+        inventoryDeliveryDetail1.setInventoryDelivery(inventoryDelivery1);
+        when(mockInventoryDeliveryDetailRepository.save(any(InventoryDeliveryDetail.class))).thenReturn(inventoryDeliveryDetail1);
 
         // Run the test
-        final List<InventoryDeliveryDetail> result = inventoryDeliveryDetailControllerUnderTest.getInventoryDeliveryDetails();
+        final Object result = inventoryDeliveryDetailControllerUnderTest.createInventoryDeliveryDetail(inventoryDeliveryDetail);
 
         // Verify the results
     }
 
     @Test
-    public void testGetInventoryDeliveryDetails_InventoryDeliveryDetailRepositoryReturnsNoItems() {
+    public void testCreateReceiveDetailByReceiveId() {
         // Setup
-        when(mockInventoryDeliveryDetailRepository.findAll()).thenReturn(Collections.emptyList());
+        final InventoryDeliveryDetail inventoryDeliveryDetail = new InventoryDeliveryDetail();
+        inventoryDeliveryDetail.setId(0);
+        inventoryDeliveryDetail.setProduct("product");
+        inventoryDeliveryDetail.setQuantity(0);
+        final InventoryDelivery inventoryDelivery = new InventoryDelivery();
+        inventoryDelivery.setId(0);
+        inventoryDelivery.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
+        final Staff staff = new Staff();
+        staff.setId(0);
+        staff.setName("name");
+        staff.setAddress("address");
+        staff.setPhoneNumber("phoneNumber");
+        staff.setEmail("email");
+        final Order order = new Order();
+        order.setId(0);
+        order.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
+        order.setStaff(new Staff());
+        final Provider provider = new Provider();
+        provider.setId(0);
+        provider.setName("name");
+        provider.setAddress("address");
+        provider.setPhoneNumber("phoneNumber");
+        provider.setFax("fax");
+        provider.setEmail("email");
+        provider.setContactPerson("contactPerson");
+        provider.setOrder(List.of(new Order()));
+        order.setProvider(provider);
+        final OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setId(0);
+        orderDetail.setProduct("product");
+        orderDetail.setQuantity(0);
+        orderDetail.setPrice("price");
+        orderDetail.setOrder(new Order());
+        order.setOrderDetails(List.of(orderDetail));
+        staff.setOrder(List.of(order));
+        final Sale sale = new Sale();
+        sale.setId(0);
+        sale.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
+        sale.setTotalPrice("totalPrice");
+        final Customer customer = new Customer();
+        customer.setId(0);
+        customer.setName("name");
+        customer.setAddress("address");
+        customer.setPhoneNumber("phoneNumber");
+        customer.setFax("fax");
+        customer.setEmail("email");
+        customer.setContactPerson("contactPerson");
+        customer.setSales(List.of(new Sale()));
+        sale.setCustomer(customer);
+        sale.setStaff(new Staff());
+        final SaleDetail saleDetail = new SaleDetail();
+        saleDetail.setId(0);
+        saleDetail.setProduct("product");
+        saleDetail.setQuantity("quantity");
+        saleDetail.setPrice("price");
+        saleDetail.setSale(new Sale());
+        sale.setSaleDetails(List.of(saleDetail));
+        staff.setSales(List.of(sale));
+        inventoryDelivery.setStaff(staff);
+        inventoryDelivery.setInventoryDeliveryDetail(List.of(new InventoryDeliveryDetail()));
+        inventoryDeliveryDetail.setInventoryDelivery(inventoryDelivery);
+
+        // Configure InventoryDeliveryDetailRepository.save(...).
+        final InventoryDeliveryDetail inventoryDeliveryDetail1 = new InventoryDeliveryDetail();
+        inventoryDeliveryDetail1.setId(0);
+        inventoryDeliveryDetail1.setProduct("product");
+        inventoryDeliveryDetail1.setQuantity(0);
+        final InventoryDelivery inventoryDelivery1 = new InventoryDelivery();
+        inventoryDelivery1.setId(0);
+        inventoryDelivery1.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
+        final Staff staff1 = new Staff();
+        staff1.setId(0);
+        staff1.setName("name");
+        staff1.setAddress("address");
+        staff1.setPhoneNumber("phoneNumber");
+        staff1.setEmail("email");
+        final Order order1 = new Order();
+        order1.setId(0);
+        order1.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
+        order1.setStaff(new Staff());
+        final Provider provider1 = new Provider();
+        provider1.setId(0);
+        provider1.setName("name");
+        provider1.setAddress("address");
+        provider1.setPhoneNumber("phoneNumber");
+        provider1.setFax("fax");
+        provider1.setEmail("email");
+        provider1.setContactPerson("contactPerson");
+        provider1.setOrder(List.of(new Order()));
+        order1.setProvider(provider1);
+        final OrderDetail orderDetail1 = new OrderDetail();
+        orderDetail1.setId(0);
+        orderDetail1.setProduct("product");
+        orderDetail1.setQuantity(0);
+        orderDetail1.setPrice("price");
+        orderDetail1.setOrder(new Order());
+        order1.setOrderDetails(List.of(orderDetail1));
+        staff1.setOrder(List.of(order1));
+        final Sale sale1 = new Sale();
+        sale1.setId(0);
+        sale1.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
+        sale1.setTotalPrice("totalPrice");
+        final Customer customer1 = new Customer();
+        customer1.setId(0);
+        customer1.setName("name");
+        customer1.setAddress("address");
+        customer1.setPhoneNumber("phoneNumber");
+        customer1.setFax("fax");
+        customer1.setEmail("email");
+        customer1.setContactPerson("contactPerson");
+        customer1.setSales(List.of(new Sale()));
+        sale1.setCustomer(customer1);
+        sale1.setStaff(new Staff());
+        final SaleDetail saleDetail1 = new SaleDetail();
+        saleDetail1.setId(0);
+        saleDetail1.setProduct("product");
+        saleDetail1.setQuantity("quantity");
+        saleDetail1.setPrice("price");
+        saleDetail1.setSale(new Sale());
+        sale1.setSaleDetails(List.of(saleDetail1));
+        staff1.setSales(List.of(sale1));
+        inventoryDelivery1.setStaff(staff1);
+        inventoryDelivery1.setInventoryDeliveryDetail(List.of(new InventoryDeliveryDetail()));
+        inventoryDeliveryDetail1.setInventoryDelivery(inventoryDelivery1);
+        when(mockInventoryDeliveryDetailRepository.save(any(InventoryDeliveryDetail.class))).thenReturn(inventoryDeliveryDetail1);
 
         // Run the test
-        final List<InventoryDeliveryDetail> result = inventoryDeliveryDetailControllerUnderTest.getInventoryDeliveryDetails();
+        final Object result = inventoryDeliveryDetailControllerUnderTest.createReceiveDetailByReceiveId(inventoryDeliveryDetail, 0);
 
         // Verify the results
+    }
+
+    @Test
+    public void testDeleteInventoryDeliveryDetail() {
+        // Setup
+
+        // Configure InventoryDeliveryDetailRepository.findById(...).
+        final InventoryDeliveryDetail inventoryDeliveryDetail1 = new InventoryDeliveryDetail();
+        inventoryDeliveryDetail1.setId(0);
+        inventoryDeliveryDetail1.setProduct("product");
+        inventoryDeliveryDetail1.setQuantity(0);
+        final InventoryDelivery inventoryDelivery = new InventoryDelivery();
+        inventoryDelivery.setId(0);
+        inventoryDelivery.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
+        final Staff staff = new Staff();
+        staff.setId(0);
+        staff.setName("name");
+        staff.setAddress("address");
+        staff.setPhoneNumber("phoneNumber");
+        staff.setEmail("email");
+        final Order order = new Order();
+        order.setId(0);
+        order.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
+        order.setStaff(new Staff());
+        final Provider provider = new Provider();
+        provider.setId(0);
+        provider.setName("name");
+        provider.setAddress("address");
+        provider.setPhoneNumber("phoneNumber");
+        provider.setFax("fax");
+        provider.setEmail("email");
+        provider.setContactPerson("contactPerson");
+        provider.setOrder(List.of(new Order()));
+        order.setProvider(provider);
+        final OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setId(0);
+        orderDetail.setProduct("product");
+        orderDetail.setQuantity(0);
+        orderDetail.setPrice("price");
+        orderDetail.setOrder(new Order());
+        order.setOrderDetails(List.of(orderDetail));
+        staff.setOrder(List.of(order));
+        final Sale sale = new Sale();
+        sale.setId(0);
+        sale.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
+        sale.setTotalPrice("totalPrice");
+        final Customer customer = new Customer();
+        customer.setId(0);
+        customer.setName("name");
+        customer.setAddress("address");
+        customer.setPhoneNumber("phoneNumber");
+        customer.setFax("fax");
+        customer.setEmail("email");
+        customer.setContactPerson("contactPerson");
+        customer.setSales(List.of(new Sale()));
+        sale.setCustomer(customer);
+        sale.setStaff(new Staff());
+        final SaleDetail saleDetail = new SaleDetail();
+        saleDetail.setId(0);
+        saleDetail.setProduct("product");
+        saleDetail.setQuantity("quantity");
+        saleDetail.setPrice("price");
+        saleDetail.setSale(new Sale());
+        sale.setSaleDetails(List.of(saleDetail));
+        staff.setSales(List.of(sale));
+        inventoryDelivery.setStaff(staff);
+        inventoryDelivery.setInventoryDeliveryDetail(List.of(new InventoryDeliveryDetail()));
+        inventoryDeliveryDetail1.setInventoryDelivery(inventoryDelivery);
+        final Optional<InventoryDeliveryDetail> inventoryDeliveryDetail = Optional.of(inventoryDeliveryDetail1);
+        when(mockInventoryDeliveryDetailRepository.findById(0)).thenReturn(inventoryDeliveryDetail);
+
+        // Run the test
+        inventoryDeliveryDetailControllerUnderTest.deleteInventoryDeliveryDetail(0);
+
+        // Verify the results
+        verify(mockInventoryDeliveryDetailRepository).delete(any(InventoryDeliveryDetail.class));
+    }
+
+    @Test
+    public void testDeleteInventoryDeliveryDetail_InventoryDeliveryDetailRepositoryFindByIdReturnsAbsent() {
+        // Setup
+        when(mockInventoryDeliveryDetailRepository.findById(0)).thenReturn(Optional.empty());
+
+        // Run the test
+        inventoryDeliveryDetailControllerUnderTest.deleteInventoryDeliveryDetail(0);
+
+        // Verify the results
+        verify(mockInventoryDeliveryDetailRepository).delete(any(InventoryDeliveryDetail.class));
     }
 
     @Test
@@ -130,7 +399,6 @@ public class InventoryDeliveryDetailControllerTest {
         final InventoryDelivery inventoryDelivery = new InventoryDelivery();
         inventoryDelivery.setId(0);
         inventoryDelivery.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        inventoryDelivery.setName("name");
         final Staff staff = new Staff();
         staff.setId(0);
         staff.setName("name");
@@ -206,8 +474,10 @@ public class InventoryDeliveryDetailControllerTest {
     }
 
     @Test
-    public void testCreateInventoryDeliveryDetail() {
+    public void testGetInventoryDeliveryDetails() {
         // Setup
+
+        // Configure InventoryDeliveryDetailRepository.findAll(...).
         final InventoryDeliveryDetail inventoryDeliveryDetail = new InventoryDeliveryDetail();
         inventoryDeliveryDetail.setId(0);
         inventoryDeliveryDetail.setProduct("product");
@@ -215,7 +485,6 @@ public class InventoryDeliveryDetailControllerTest {
         final InventoryDelivery inventoryDelivery = new InventoryDelivery();
         inventoryDelivery.setId(0);
         inventoryDelivery.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        inventoryDelivery.setName("name");
         final Staff staff = new Staff();
         staff.setId(0);
         staff.setName("name");
@@ -270,74 +539,22 @@ public class InventoryDeliveryDetailControllerTest {
         inventoryDelivery.setStaff(staff);
         inventoryDelivery.setInventoryDeliveryDetail(List.of(new InventoryDeliveryDetail()));
         inventoryDeliveryDetail.setInventoryDelivery(inventoryDelivery);
-
-        // Configure InventoryDeliveryDetailRepository.save(...).
-        final InventoryDeliveryDetail inventoryDeliveryDetail1 = new InventoryDeliveryDetail();
-        inventoryDeliveryDetail1.setId(0);
-        inventoryDeliveryDetail1.setProduct("product");
-        inventoryDeliveryDetail1.setQuantity(0);
-        final InventoryDelivery inventoryDelivery1 = new InventoryDelivery();
-        inventoryDelivery1.setId(0);
-        inventoryDelivery1.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        inventoryDelivery1.setName("name");
-        final Staff staff1 = new Staff();
-        staff1.setId(0);
-        staff1.setName("name");
-        staff1.setAddress("address");
-        staff1.setPhoneNumber("phoneNumber");
-        staff1.setEmail("email");
-        final Order order1 = new Order();
-        order1.setId(0);
-        order1.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        order1.setStaff(new Staff());
-        final Provider provider1 = new Provider();
-        provider1.setId(0);
-        provider1.setName("name");
-        provider1.setAddress("address");
-        provider1.setPhoneNumber("phoneNumber");
-        provider1.setFax("fax");
-        provider1.setEmail("email");
-        provider1.setContactPerson("contactPerson");
-        provider1.setOrder(List.of(new Order()));
-        order1.setProvider(provider1);
-        final OrderDetail orderDetail1 = new OrderDetail();
-        orderDetail1.setId(0);
-        orderDetail1.setProduct("product");
-        orderDetail1.setQuantity(0);
-        orderDetail1.setPrice("price");
-        orderDetail1.setOrder(new Order());
-        order1.setOrderDetails(List.of(orderDetail1));
-        staff1.setOrder(List.of(order1));
-        final Sale sale1 = new Sale();
-        sale1.setId(0);
-        sale1.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        sale1.setTotalPrice("totalPrice");
-        final Customer customer1 = new Customer();
-        customer1.setId(0);
-        customer1.setName("name");
-        customer1.setAddress("address");
-        customer1.setPhoneNumber("phoneNumber");
-        customer1.setFax("fax");
-        customer1.setEmail("email");
-        customer1.setContactPerson("contactPerson");
-        customer1.setSales(List.of(new Sale()));
-        sale1.setCustomer(customer1);
-        sale1.setStaff(new Staff());
-        final SaleDetail saleDetail1 = new SaleDetail();
-        saleDetail1.setId(0);
-        saleDetail1.setProduct("product");
-        saleDetail1.setQuantity("quantity");
-        saleDetail1.setPrice("price");
-        saleDetail1.setSale(new Sale());
-        sale1.setSaleDetails(List.of(saleDetail1));
-        staff1.setSales(List.of(sale1));
-        inventoryDelivery1.setStaff(staff1);
-        inventoryDelivery1.setInventoryDeliveryDetail(List.of(new InventoryDeliveryDetail()));
-        inventoryDeliveryDetail1.setInventoryDelivery(inventoryDelivery1);
-        when(mockInventoryDeliveryDetailRepository.save(any(InventoryDeliveryDetail.class))).thenReturn(inventoryDeliveryDetail1);
+        final List<InventoryDeliveryDetail> inventoryDeliveryDetails = List.of(inventoryDeliveryDetail);
+        when(mockInventoryDeliveryDetailRepository.findAll()).thenReturn(inventoryDeliveryDetails);
 
         // Run the test
-        final Object result = inventoryDeliveryDetailControllerUnderTest.createInventoryDeliveryDetail(inventoryDeliveryDetail);
+        final List<InventoryDeliveryDetail> result = inventoryDeliveryDetailControllerUnderTest.getInventoryDeliveryDetails();
+
+        // Verify the results
+    }
+
+    @Test
+    public void testGetInventoryDeliveryDetails_InventoryDeliveryDetailRepositoryReturnsNoItems() {
+        // Setup
+        when(mockInventoryDeliveryDetailRepository.findAll()).thenReturn(Collections.emptyList());
+
+        // Run the test
+        final List<InventoryDeliveryDetail> result = inventoryDeliveryDetailControllerUnderTest.getInventoryDeliveryDetails();
 
         // Verify the results
     }
@@ -352,7 +569,6 @@ public class InventoryDeliveryDetailControllerTest {
         final InventoryDelivery inventoryDelivery = new InventoryDelivery();
         inventoryDelivery.setId(0);
         inventoryDelivery.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        inventoryDelivery.setName("name");
         final Staff staff = new Staff();
         staff.setId(0);
         staff.setName("name");
@@ -416,7 +632,6 @@ public class InventoryDeliveryDetailControllerTest {
         final InventoryDelivery inventoryDelivery1 = new InventoryDelivery();
         inventoryDelivery1.setId(0);
         inventoryDelivery1.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        inventoryDelivery1.setName("name");
         final Staff staff1 = new Staff();
         staff1.setId(0);
         staff1.setName("name");
@@ -482,7 +697,6 @@ public class InventoryDeliveryDetailControllerTest {
         final InventoryDelivery inventoryDelivery2 = new InventoryDelivery();
         inventoryDelivery2.setId(0);
         inventoryDelivery2.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        inventoryDelivery2.setName("name");
         final Staff staff2 = new Staff();
         staff2.setId(0);
         staff2.setName("name");
@@ -555,7 +769,6 @@ public class InventoryDeliveryDetailControllerTest {
         final InventoryDelivery inventoryDelivery = new InventoryDelivery();
         inventoryDelivery.setId(0);
         inventoryDelivery.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        inventoryDelivery.setName("name");
         final Staff staff = new Staff();
         staff.setId(0);
         staff.setName("name");
@@ -621,7 +834,6 @@ public class InventoryDeliveryDetailControllerTest {
         final InventoryDelivery inventoryDelivery1 = new InventoryDelivery();
         inventoryDelivery1.setId(0);
         inventoryDelivery1.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        inventoryDelivery1.setName("name");
         final Staff staff1 = new Staff();
         staff1.setId(0);
         staff1.setName("name");
@@ -682,94 +894,5 @@ public class InventoryDeliveryDetailControllerTest {
         final Object result = inventoryDeliveryDetailControllerUnderTest.updateInventoryDeliveryDetail(newInventoryDeliveryDetail, 0);
 
         // Verify the results
-    }
-
-    @Test
-    public void testDeleteInventoryDeliveryDetail() {
-        // Setup
-
-        // Configure InventoryDeliveryDetailRepository.findById(...).
-        final InventoryDeliveryDetail inventoryDeliveryDetail1 = new InventoryDeliveryDetail();
-        inventoryDeliveryDetail1.setId(0);
-        inventoryDeliveryDetail1.setProduct("product");
-        inventoryDeliveryDetail1.setQuantity(0);
-        final InventoryDelivery inventoryDelivery = new InventoryDelivery();
-        inventoryDelivery.setId(0);
-        inventoryDelivery.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        inventoryDelivery.setName("name");
-        final Staff staff = new Staff();
-        staff.setId(0);
-        staff.setName("name");
-        staff.setAddress("address");
-        staff.setPhoneNumber("phoneNumber");
-        staff.setEmail("email");
-        final Order order = new Order();
-        order.setId(0);
-        order.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        order.setStaff(new Staff());
-        final Provider provider = new Provider();
-        provider.setId(0);
-        provider.setName("name");
-        provider.setAddress("address");
-        provider.setPhoneNumber("phoneNumber");
-        provider.setFax("fax");
-        provider.setEmail("email");
-        provider.setContactPerson("contactPerson");
-        provider.setOrder(List.of(new Order()));
-        order.setProvider(provider);
-        final OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setId(0);
-        orderDetail.setProduct("product");
-        orderDetail.setQuantity(0);
-        orderDetail.setPrice("price");
-        orderDetail.setOrder(new Order());
-        order.setOrderDetails(List.of(orderDetail));
-        staff.setOrder(List.of(order));
-        final Sale sale = new Sale();
-        sale.setId(0);
-        sale.setDate(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
-        sale.setTotalPrice("totalPrice");
-        final Customer customer = new Customer();
-        customer.setId(0);
-        customer.setName("name");
-        customer.setAddress("address");
-        customer.setPhoneNumber("phoneNumber");
-        customer.setFax("fax");
-        customer.setEmail("email");
-        customer.setContactPerson("contactPerson");
-        customer.setSales(List.of(new Sale()));
-        sale.setCustomer(customer);
-        sale.setStaff(new Staff());
-        final SaleDetail saleDetail = new SaleDetail();
-        saleDetail.setId(0);
-        saleDetail.setProduct("product");
-        saleDetail.setQuantity("quantity");
-        saleDetail.setPrice("price");
-        saleDetail.setSale(new Sale());
-        sale.setSaleDetails(List.of(saleDetail));
-        staff.setSales(List.of(sale));
-        inventoryDelivery.setStaff(staff);
-        inventoryDelivery.setInventoryDeliveryDetail(List.of(new InventoryDeliveryDetail()));
-        inventoryDeliveryDetail1.setInventoryDelivery(inventoryDelivery);
-        final Optional<InventoryDeliveryDetail> inventoryDeliveryDetail = Optional.of(inventoryDeliveryDetail1);
-        when(mockInventoryDeliveryDetailRepository.findById(0)).thenReturn(inventoryDeliveryDetail);
-
-        // Run the test
-        inventoryDeliveryDetailControllerUnderTest.deleteInventoryDeliveryDetail(0);
-
-        // Verify the results
-        verify(mockInventoryDeliveryDetailRepository).delete(any(InventoryDeliveryDetail.class));
-    }
-
-    @Test
-    public void testDeleteInventoryDeliveryDetail_InventoryDeliveryDetailRepositoryFindByIdReturnsAbsent() {
-        // Setup
-        when(mockInventoryDeliveryDetailRepository.findById(0)).thenReturn(Optional.empty());
-
-        // Run the test
-        inventoryDeliveryDetailControllerUnderTest.deleteInventoryDeliveryDetail(0);
-
-        // Verify the results
-        verify(mockInventoryDeliveryDetailRepository).delete(any(InventoryDeliveryDetail.class));
     }
 }

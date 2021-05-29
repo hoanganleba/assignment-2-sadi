@@ -172,16 +172,4 @@ public class CategoryControllerTest {
         // Verify the results
         verify(mockCategoryRepository).delete(any(Category.class));
     }
-
-    @Test
-    public void testDeleteCategory_CategoryRepositoryFindByIdReturnsAbsent() {
-        // Setup
-        when(mockCategoryRepository.findById(0)).thenReturn(Optional.empty());
-
-        // Run the test
-        categoryControllerUnderTest.deleteCategory(0);
-
-        // Verify the results
-        verify(mockCategoryRepository).delete(any(Category.class));
-    }
 }

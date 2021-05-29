@@ -1,10 +1,13 @@
 package com.example.assignment2sadi.controller;
 
+import com.example.assignment2sadi.model.InventoryReceive;
 import com.example.assignment2sadi.model.Sale;
 import com.example.assignment2sadi.repository.SaleRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController
@@ -20,6 +23,20 @@ public class SaleController {
     @GetMapping("/sales")
     public List<Sale> getSales() {
         return saleRepository.findAll();
+    }
+
+    @GetMapping("/salesByDate")
+    public List<Sale> getSales(@RequestParam String date) throws ParseException {
+        return saleRepository.findAllByDate(
+                new SimpleDateFormat("yyyy-MM-dd").parse(date)
+        );
+    }
+
+    @GetMapping("/salesByPeriod")
+    public List<Sale> getSales(@RequestParam String startDate, @RequestParam String endDate) throws ParseException {
+        return saleRepository.findAllByDateBetween(
+                new SimpleDateFormat("yyyy-MM-dd").parse(startDate),
+                new SimpleDateFormat("yyyy-MM-dd").parse(endDate));
     }
 
     // Get sale by sale id

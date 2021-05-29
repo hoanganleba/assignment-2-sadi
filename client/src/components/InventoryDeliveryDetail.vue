@@ -3,6 +3,7 @@
       :headers="headers"
       :items="deliveryDetails"
       class="elevation-1"
+      hide-default-footer
   >
     <template v-slot:top>
       <v-toolbar

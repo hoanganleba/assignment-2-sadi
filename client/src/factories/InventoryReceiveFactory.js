@@ -7,6 +7,12 @@ export default {
     getAllInventoryReceives(){
         return axios.get('/inventoryReceives')
     },
+    getAllInventoryReceivesByPeriod(startDate, endDate) {
+        return axios.get('/inventoryReceivesByPeriod', {params: {
+                startDate,
+                endDate
+            }})
+    },
     editInventoryReceive(id,obj){
         return axios.put(`/inventoryReceive/${id}`,obj)
     },

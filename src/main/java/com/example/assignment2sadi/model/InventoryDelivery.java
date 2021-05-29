@@ -21,9 +21,6 @@ public class InventoryDelivery {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="UTC")
     private Date date;
 
-    @Column
-    private String name;
-
     @ManyToOne
     @JoinColumn(name = "staff_id")
     private Staff staff;

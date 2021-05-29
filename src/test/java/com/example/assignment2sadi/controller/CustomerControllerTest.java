@@ -649,16 +649,4 @@ public class CustomerControllerTest {
         // Verify the results
         verify(mockCustomerRepository).delete(any(Customer.class));
     }
-
-    @Test
-    public void testDeleteCustomer_CustomerRepositoryFindByIdReturnsAbsent() {
-        // Setup
-        when(mockCustomerRepository.findById(0)).thenReturn(Optional.empty());
-
-        // Run the test
-        customerControllerUnderTest.deleteCustomer(0);
-
-        // Verify the results
-        verify(mockCustomerRepository).delete(any(Customer.class));
-    }
 }

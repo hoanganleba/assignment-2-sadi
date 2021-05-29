@@ -1,10 +1,13 @@
 package com.example.assignment2sadi.controller;
 
 import com.example.assignment2sadi.model.InventoryDelivery;
+import com.example.assignment2sadi.model.InventoryReceive;
 import com.example.assignment2sadi.repository.InventoryDeliveryRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController
@@ -20,6 +23,20 @@ public class InventoryDeliveryController {
     @GetMapping("/inventoryDeliveries")
     public List<InventoryDelivery> getInventoryDeliveries() {
         return inventoryDeliveryRepository.findAll();
+    }
+
+    @GetMapping("/inventoryDeliveriesByDate")
+    public List<InventoryDelivery> getInventoryReceives(@RequestParam String date) throws ParseException {
+        return inventoryDeliveryRepository.findAllByDate(
+                new SimpleDateFormat("yyyy-MM-dd").parse(date)
+        );
+    }
+
+    @GetMapping("/inventoryDeliveriesByPeriod")
+    public List<InventoryDelivery> getInventoryDeliveries(@RequestParam String startDate, @RequestParam String endDate) throws ParseException {
+        return inventoryDeliveryRepository.findAllByDateBetween(
+                new SimpleDateFormat("yyyy-MM-dd").parse(startDate),
+                new SimpleDateFormat("yyyy-MM-dd").parse(endDate));
     }
 
     // Get inventoryDelivery by inventoryDelivery id
@@ -38,7 +55,6 @@ public class InventoryDeliveryController {
     @PutMapping("/inventoryDelivery/{inventoryDeliveryId}")
     public Object updateInventoryDelivery(@RequestBody InventoryDelivery newInventoryDelivery, @PathVariable Integer inventoryDeliveryId) {
         return inventoryDeliveryRepository.findById(inventoryDeliveryId).map(inventoryDelivery -> {
-            inventoryDelivery.setName(newInventoryDelivery.getName());
             inventoryDeliveryRepository.save(inventoryDelivery);
             return ResponseEntity.ok(newInventoryDelivery);
         });

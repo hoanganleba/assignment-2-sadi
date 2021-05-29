@@ -3,10 +3,12 @@
       :headers="headers"
       :items="sales"
       class="elevation-1"
+      hide-default-footer
   >
     <template v-slot:top>
       <v-toolbar
           flat
+          height="120px"
       >
         <v-toolbar-title>Sale</v-toolbar-title>
         <v-divider
@@ -14,6 +16,92 @@
             inset
             vertical
         ></v-divider>
+        <div class="d-flex align-items-center">
+          <v-menu
+              ref="menu"
+              v-model="menu"
+              :close-on-content-click="false"
+              :return-value.sync="startDate"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                  v-model="startDate"
+                  label="Start Date"
+                  outlined
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+                v-model="startDate"
+                no-title
+                scrollable
+            >
+              <v-spacer></v-spacer>
+              <v-btn
+                  text
+                  color="primary"
+                  @click="menu = false"
+              >
+                Cancel
+              </v-btn>
+              <v-btn
+                  text
+                  color="primary"
+                  @click="$refs.menu.save(startDate)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu>
+          <v-menu
+              ref="menu1"
+              v-model="menu1"
+              :close-on-content-click="false"
+              :return-value.sync="endDate"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                  v-model="endDate"
+                  label="End Date"
+                  outlined
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+                v-model="endDate"
+                no-title
+                scrollable
+            >
+              <v-spacer></v-spacer>
+              <v-btn
+                  text
+                  color="primary"
+                  @click="menu1 = false"
+              >
+                Cancel
+              </v-btn>
+              <v-btn
+                  text
+                  color="primary"
+                  @click="$refs.menu1.save(endDate)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu>
+          <v-btn class="mt-2 ml-3" @click="filterTime">Filter</v-btn>
+          <v-btn class="mt-2 ml-3" @click="reset">Reset</v-btn>
+        </div>
         <v-spacer></v-spacer>
         <v-dialog
             v-model="dialog"
@@ -162,7 +250,10 @@ export default {
     sales: [],
     staffs: [],
     customers: [],
-    date: '',
+    menu: false,
+    menu1: false,
+    startDate: '',
+    endDate: '',
     editedIndex: -1,
     editedSale: {
       id: '',
@@ -207,6 +298,16 @@ export default {
       this.sales = sales.data
       this.staffs = staffs.data
       this.customers = customers.data
+    },
+
+    async filterTime() {
+      const sales = await SaleFactory.getAllSalesByPeriod(this.startDate, this.endDate)
+      this.sales = sales.data
+    },
+
+    async reset() {
+      const sales = await SaleFactory.getAllSales()
+      this.sales = sales.data
     },
 
     editSale(item) {

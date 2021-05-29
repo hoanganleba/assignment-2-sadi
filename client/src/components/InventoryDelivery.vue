@@ -3,10 +3,12 @@
       :headers="headers"
       :items="deliveries"
       class="elevation-1"
+      hide-default-footer
   >
     <template v-slot:top>
       <v-toolbar
           flat
+          height="120px"
       >
         <v-toolbar-title>Inventory Delivery</v-toolbar-title>
         <v-divider
@@ -14,6 +16,92 @@
             inset
             vertical
         ></v-divider>
+        <div class="d-flex align-items-center">
+          <v-menu
+              ref="menu"
+              v-model="menu"
+              :close-on-content-click="false"
+              :return-value.sync="startDate"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                  v-model="startDate"
+                  label="Start Date"
+                  outlined
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+                v-model="startDate"
+                no-title
+                scrollable
+            >
+              <v-spacer></v-spacer>
+              <v-btn
+                  text
+                  color="primary"
+                  @click="menu = false"
+              >
+                Cancel
+              </v-btn>
+              <v-btn
+                  text
+                  color="primary"
+                  @click="$refs.menu.save(startDate)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu>
+          <v-menu
+              ref="menu1"
+              v-model="menu1"
+              :close-on-content-click="false"
+              :return-value.sync="endDate"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                  v-model="endDate"
+                  label="End Date"
+                  outlined
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+                v-model="endDate"
+                no-title
+                scrollable
+            >
+              <v-spacer></v-spacer>
+              <v-btn
+                  text
+                  color="primary"
+                  @click="menu1 = false"
+              >
+                Cancel
+              </v-btn>
+              <v-btn
+                  text
+                  color="primary"
+                  @click="$refs.menu1.save(endDate)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu>
+          <v-btn class="mt-2 ml-3" @click="filterTime">Filter</v-btn>
+          <v-btn class="mt-2 ml-3" @click="reset">Reset</v-btn>
+        </div>
         <v-spacer></v-spacer>
         <v-dialog
             v-model="dialog"
@@ -135,8 +223,11 @@ export default {
       {text: 'Details', value: 'details'},
       {text: 'Actions', value: 'actions', sortable: false},
     ],
+    menu: false,
+    menu1: false,
     deliveries: [],
-    date: '',
+    startDate: '',
+    endDate: '',
     staffs: [],
     providers: [],
     editedIndex: -1,
@@ -179,6 +270,16 @@ export default {
       this.deliveries = deliveries.data
       this.staffs = staffs.data
       this.providers = providers.data
+    },
+
+    async filterTime() {
+      const deliveries = await InventoryDeliveryFactory.getAllInventoryDeliveriesByPeriod(this.startDate, this.endDate)
+      this.deliveries = deliveries.data
+    },
+
+    async reset() {
+      const deliveries = await InventoryDeliveryFactory.getAllInventoryDeliveries()
+      this.deliveries = deliveries.data
     },
 
     editInventoryDelivery(item) {
